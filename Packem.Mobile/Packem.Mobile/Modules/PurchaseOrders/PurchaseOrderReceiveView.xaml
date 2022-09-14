@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.PurchaseOrders.PurchaseOrderReceiveView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:converters="clr-namespace:Packem.Mobile.Common.Converters"
+    xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+    xmlns:numericBox="clr-namespace:Syncfusion.SfNumericTextBox.XForms;assembly=Syncfusion.SfNumericTextBox.XForms"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.PurchaseOrders"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    Title="PO Receive"
+    x:DataType="vm:PurchaseOrderReceiveViewModel"
+    Shell.TitleColor="{StaticResource Primary}">
+    <ContentPage.Resources>
+        <converters:FirstValidationErrorConverter x:Key="FirstValidationErrorConverter" />
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding ClearCommand}"
+            Order="Primary"
+            Text="Clear" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <Grid xct:StateLayout.AnimateStateChanges="False" xct:StateLayout.CurrentState="{Binding CurrentState}">
+            <xct:StateLayout.StateViews>
+                <xct:StateView StateKey="Loading" VerticalOptions="FillAndExpand">
+                    <controls:ActivityIndicatorView ActivityIndicatorViewModel="{Binding ActivityIndicatorViewModel}" />
+                </xct:StateView>
+                <xct:StateView StateKey="Success">
+                    <ScrollView>
+                        <StackLayout>
+                            <controls:EntryWithScanAndSearchView
+                                Padding="15,15,15,-10"
+                                ErrorText="{Binding PO.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                                HasError="{Binding PO.IsValid, Converter={xct:InvertedBoolConverter}}"
+                                Hint="PO Lookup*"
+                                ScanCommand="{Binding ScanOrderCommand}"
+                                SearchCommand="{Binding SearchOrderCommand}"
+                                Text="{Binding PO.Value.PurchaseOrderNo, Mode=TwoWay}"
+                                UnfocusedCommand="{Binding OrderUnfocusedCommand}" />
+                            <inputLayout:SfTextInputLayout
+                                Padding="15,0,15,-10"
+                                ContainerType="Outlined"
+                                Hint="Vendor Number">
+                                <Entry IsEnabled="False" Text="{Binding PO.Value.VendorNo}" />
+                            </inputLayout:SfTextInputLayout>
+                            <inputLayout:SfTextInputLayout
+                                Padding="15,0,15,-10"
+                                ContainerType="Outlined"
+                                Hint="Vendor Name">
+                                <Entry IsEnabled="False" Text="{Binding PO.Value.VendorName}" />
+                            </inputLayout:SfTextInputLayout>
+
+                            <StackLayout>
+                                <StackLayout HeightRequest="{StaticResource SeparatorHeightRequest}">
+                                    <BoxView Style="{StaticResource SeparatorBoxView}" />
+                                </StackLayout>
+                            </StackLayout>
+
+                            <controls:EntryWithScanAndSearchView
+                                Padding="15,0,15,-10"
+                                ErrorText="{Binding Receive.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                                HasError="{Binding Receive.IsValid, Converter={xct:InvertedBoolConverter}}"
+                                Hint="Item Lookup*"
+                                ScanCommand="{Binding ScanItemCommand}"
+                                SearchCommand="{Binding SearchItemCommand}"
+                                Text="{Binding Receive.Value.SKU, Mode=TwoWay}"
+                                UnfocusedCommand="{Binding ItemUnfocusedCommand}" />
+                            <inputLayout:SfTextInputLayout
+                                Padding="15,0,15,-10"
+                                ContainerType="Outlined"
+                                Hint="Description">
+                                <Entry IsEnabled="False" Text="{Binding Receive.Value.Description}" />
+                            </inputLayout:SfTextInputLayout>
+                            <inputLayout:SfTextInputLayout
+                                Padding="15,0,15,-10"
+                                ContainerType="Outlined"
+                                Hint="UOM">
+                                <Entry IsEnabled="False" Text="{Binding Receive.Value.UOM}" />
+                            </inputLayout:SfTextInputLayout>
+                            <inputLayout:SfTextInputLayout
+                                Padding="15,0,15,-10"
+                                ContainerType="Outlined"
+                                Hint="Remaining">
+                                <numericBox:SfNumericTextBox
+                                    AllowDefaultDecimalDigits="False"
+                                    AllowNull="True"
+                                    IsEnabled="False"
+                                    Value="{Binding Receive.Value.Remaining}" />
+                            </inputLayout:SfTextInputLayout>
+
+                            <StackLayout>
+                                <StackLayout HeightRequest="{StaticResource SeparatorHeightRequest}">
+                                    <BoxView Style="{StaticResource SeparatorBoxView}" />
+                                </StackLayout>
+                            </StackLayout>
+
+                            <inputLayout:SfTextInputLayout
+                                Padding="15,0,15,0"
+                                ContainerType="Outlined"
+                                ErrorText="{Binding QtyReceived.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                                HasError="{Binding QtyReceived.IsValid, Converter={xct:InvertedBoolConverter}}"
+                                Hint="QTY Received">
+                                <numericBox:SfNumericTextBox
+                                    AllowDefaultDecimalDigits="False"
+                                    AllowNull="True"
+                                    Value="{Binding QtyReceived.Value}">
+                                    <numericBox:SfNumericTextBox.Behaviors>
+                                        <xct:EventToCommandBehavior Command="{Binding QtyReceivedUnfocusedCommand}" EventName="Unfocused" />
+                                    </numericBox:SfNumericTextBox.Behaviors>
+                                </numericBox:SfNumericTextBox>
+                            </inputLayout:SfTextInputLayout>
+
+                            <StackLayout
+                                Padding="15,0,15,15"
+                                HorizontalOptions="EndAndExpand"
+                                Orientation="Horizontal">
+                                <buttons:SfButton
+                                    Command="{Binding PrintCommand}"
+                                    IsEnabled="{Binding IsNotBusy}"
+                                    Text="PRINT"
+                                    WidthRequest="80" />
+                                <buttons:SfButton
+                                    Command="{Binding ReceivePrintCommand}"
+                                    IsEnabled="{Binding IsNotBusy}"
+                                    Text="RECEIVE" />
+                            </StackLayout>
+
+                            <!--<StackLayout Padding="15,0,15,15">
+                                <buttons:SfButton
+                                    Padding="10"
+                                    BackgroundColor="{StaticResource Primary}"
+                                    Command="{Binding Print2Command}"
+                                    CornerRadius="3"
+                                    Text="WEB PRINT"
+                                    TextColor="{StaticResource OnPrimary}" />
+                            </StackLayout>-->
+                        </StackLayout>
+                    </ScrollView>
+                </xct:StateView>
+            </xct:StateLayout.StateViews>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

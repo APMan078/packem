@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.Receipts.ReceiptItemScanView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Receipts"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:DataType="vm:ReceiptItemScanViewModel"
+    Shell.PresentationMode="Modal">
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <Grid VerticalOptions="FillAndExpand">
+            <controls:BarcodeScannerView
+                FlashCommand="{Binding FlashCommand}"
+                IsAnalyzing="True"
+                IsScanning="True"
+                IsTorchOn="{Binding IsTorchOn}"
+                ScanResultCommand="{Binding BarcodeScanResultCommand}" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

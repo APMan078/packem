@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.Barcode.BarcodeScanView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:sfPopup="clr-namespace:Syncfusion.XForms.PopupLayout;assembly=Syncfusion.SfPopupLayout.XForms"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Barcode"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:DataType="vm:BarcodeScanViewModel"
+    Shell.PresentationMode="Modal">
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <Grid>
+            <Grid VerticalOptions="FillAndExpand">
+                <controls:BarcodeScannerView
+                    FlashCommand="{Binding FlashCommand}"
+                    IsAnalyzing="True"
+                    IsScanning="True"
+                    IsTorchOn="{Binding IsTorchOn}"
+                    ScanResultCommand="{Binding ScanResultCommand}" />
+            </Grid>
+            <sfPopup:SfPopupLayout IsOpen="{Binding PopupOpen}" StaysOpen="True">
+                <sfPopup:SfPopupLayout.PopupView>
+                    <sfPopup:PopupView
+                        AcceptButtonText="CANCEL"
+                        AcceptCommand="{Binding PopupAcceptCommand}"
+                        AppearanceMode="OneButton"
+                        AutoSizeMode="Height"
+                        ShowHeader="False">
+                        <sfPopup:PopupView.ContentTemplate>
+                            <DataTemplate>
+                                <StackLayout Padding="10,10,10,0">
+                                    <Label FontSize="Medium" Text="Scan Successful" />
+                                    <Label Text="{Binding Barcode}" TextColor="#707070" />
+
+                                    <StackLayout Padding="0,20,0,0">
+                                        <Label FontSize="Medium" Text="Inventory">
+                                            <Label.GestureRecognizers>
+                                                <TapGestureRecognizer Command="{Binding InventoryCommand}" />
+                                            </Label.GestureRecognizers>
+                                        </Label>
+                                        <BoxView Style="{StaticResource SeparatorBoxView}" />
+                                    </StackLayout>
+                                    <StackLayout>
+                                        <Label FontSize="Medium" Text="PO Receive" />
+                                        <BoxView Style="{StaticResource SeparatorBoxView}" />
+                                    </StackLayout>
+                                    <StackLayout>
+                                        <Label FontSize="Medium" Text="Put Away" />
+                                        <BoxView Style="{StaticResource SeparatorBoxView}" />
+                                    </StackLayout>
+                                    <StackLayout>
+                                        <Label FontSize="Medium" Text="Picking" />
+                                        <BoxView Style="{StaticResource SeparatorBoxView}" />
+                                    </StackLayout>
+                                    <StackLayout>
+                                        <Label FontSize="Medium" Text="Transfer" />
+                                        <BoxView Style="{StaticResource SeparatorBoxView}" />
+                                    </StackLayout>
+                                </StackLayout>
+                            </DataTemplate>
+                        </sfPopup:PopupView.ContentTemplate>
+                    </sfPopup:PopupView>
+                </sfPopup:SfPopupLayout.PopupView>
+            </sfPopup:SfPopupLayout>
+
+            <controls:ActivityIndicatorView Grid.Row="0" ActivityIndicatorViewModel="{Binding ActivityIndicatorViewModel}" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

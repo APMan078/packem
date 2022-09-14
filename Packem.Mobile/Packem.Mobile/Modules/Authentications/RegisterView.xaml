@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.Authentications.RegisterView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:me="clr-namespace:Packem.Mobile.Common.MarkupExtensions"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Authentications"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:DataType="vm:RegisterViewModel"
+    Shell.FlyoutItemIsVisible="False"
+    Shell.NavBarIsVisible="False">
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <AbsoluteLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+            <StackLayout
+                Padding="18"
+                AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                AbsoluteLayout.LayoutFlags="All"
+                VerticalOptions="FillAndExpand">
+                <StackLayout
+                    Padding="10,0,10,0"
+                    Orientation="Horizontal"
+                    VerticalOptions="Start">
+                    <Image HeightRequest="60" Source="{me:EmbeddedImage Packem.Mobile.Resources.Images.packem_logo_red.png}" />
+                    <StackLayout HorizontalOptions="EndAndExpand" Orientation="Horizontal">
+                        <Image>
+                            <Image.Source>
+                                <FontImageSource
+                                    FontFamily="{DynamicResource FontMaterialIconsOutlinedRegular}"
+                                    Glyph="{StaticResource IconSettings}"
+                                    Color="Gray" />
+                            </Image.Source>
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SettingCommand}" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout VerticalOptions="FillAndExpand">
+                    <StackLayout>
+                        <Label
+                            Padding="0,30,0,20"
+                            FontAttributes="Bold"
+                            FontSize="Title"
+                            Text="Welcome to PackemWMS" />
+                        <StackLayout Padding="0,0,0,30">
+                            <Label FontSize="Medium" Text="To register a device, an administrator" />
+                            <Label
+                                Margin="0,-4,0,0"
+                                FontSize="Medium"
+                                Text="To must access Device Management from" />
+                            <Label
+                                Margin="0,-4,0,0"
+                                FontSize="Medium"
+                                Text="the PackemWMS web application." />
+                        </StackLayout>
+                        <buttons:SfButton
+                            Command="{Binding RegisterCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            Text="REGISTER DEVICE" />
+                        <StackLayout>
+                            <Label
+                                Padding="0,20,0,10"
+                                Style="{StaticResource LinkLabel}"
+                                Text="Help" />
+                            <Label Style="{StaticResource LinkLabel}" Text="Info" />
+                        </StackLayout>
+                    </StackLayout>
+
+                </StackLayout>
+                <StackLayout VerticalOptions="End">
+                    <StackLayout
+                        HorizontalOptions="CenterAndExpand"
+                        Orientation="Horizontal"
+                        VerticalOptions="EndAndExpand">
+                        <Image HeightRequest="40" Source="{me:EmbeddedImage Packem.Mobile.Resources.Images.packem_logo_red_secondary.png}" />
+                        <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+                            <Label
+                                FontAttributes="Bold"
+                                FontSize="Large"
+                                Text="PACKEM" />
+                        </StackLayout>
+                    </StackLayout>
+                </StackLayout>
+            </StackLayout>
+
+            <controls:ActivityIndicatorView
+                AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                AbsoluteLayout.LayoutFlags="All"
+                ActivityIndicatorViewModel="{Binding ActivityIndicatorViewModel}" />
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

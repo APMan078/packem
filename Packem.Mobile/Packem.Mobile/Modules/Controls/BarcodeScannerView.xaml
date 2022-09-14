@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<StackLayout
+    x:Class="Packem.Mobile.Modules.Controls.BarcodeScannerView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms">
+    <Grid VerticalOptions="FillAndExpand">
+        <zxing:ZXingScannerView x:Name="scanner" />
+        <zxing:ZXingDefaultOverlay x:Name="scannerOverlay" ShowFlashButton="True" />
+    </Grid>
+</StackLayout>

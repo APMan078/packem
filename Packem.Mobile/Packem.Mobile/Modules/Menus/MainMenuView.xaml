@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.Menus.MainMenuView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:me="clr-namespace:Packem.Mobile.Common.MarkupExtensions"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Menus"
+    x:DataType="vm:MainMenuViewModel"
+    Shell.FlyoutItemIsVisible="False"
+    Shell.NavBarIsVisible="True">
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="4*, 1*">
+            <StackLayout
+                Grid.Column="0"
+                HorizontalOptions="CenterAndExpand"
+                Orientation="Horizontal">
+                <Image HeightRequest="40" Source="{me:EmbeddedImage Packem.Mobile.Resources.Images.packem_logo_red.png}" />
+            </StackLayout>
+            <StackLayout
+                Grid.Column="1"
+                Padding="0,0,10,0"
+                HorizontalOptions="End"
+                Orientation="Horizontal">
+                <Image>
+                    <Image.Source>
+                        <FontImageSource
+                            FontFamily="{DynamicResource FontMaterialIconsOutlinedRegular}"
+                            Glyph="{StaticResource IconSettings}"
+                            Color="Gray" />
+                    </Image.Source>
+                </Image>
+            </StackLayout>
+        </Grid>
+    </Shell.TitleView>
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout>
+                <Grid HeightRequest="50">
+                    <BoxView BackgroundColor="#E2E2E2" />
+                    <Grid
+                        ColumnDefinitions="1*, 1*"
+                        ColumnSpacing="0"
+                        RowSpacing="0">
+                        <Grid
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            Margin="0,1,1,1"
+                            BackgroundColor="White">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding InventoryCommand}" />
+                            </Grid.GestureRecognizers>
+                            <StackLayout
+                                HorizontalOptions="Center"
+                                Orientation="Horizontal"
+                                VerticalOptions="Center">
+                                <Image HeightRequest="20" VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource
+                                            FontFamily="{DynamicResource FontMaterialIconsOutlinedRegular}"
+                                            Glyph="{StaticResource IconInventory2}"
+                                            Color="#1C9DCC" />
+                                    </Image.Source>
+                                </Image>
+                                <Label
+                                    Text="Inventory"
+                                    TextColor="#1C9DCC"
+                                    VerticalOptions="Center" />
+                            </StackLayout>
+                        </Grid>
+                        <Grid
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            Margin="0,1,0,1"
+                            BackgroundColor="White">
+                            <Grid.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding ScanCommand}" />
+                            </Grid.GestureRecognizers>
+                            <StackLayout
+                                HorizontalOptions="Center"
+                                Orientation="Horizontal"
+                                VerticalOptions="Center">
+                                <Image HeightRequest="20" VerticalOptions="Center">
+                                    <Image.Source>
+                                        <FontImageSource
+                                            FontFamily="{DynamicResource FontMaterialIconsOutlinedRegular}"
+                                            Glyph="{StaticResource IconDocumentScanner}"
+                                            Color="#1C9DCC" />
+                                    </Image.Source>
+                                </Image>
+                                <Label
+                                    Text="Scan Item"
+                                    TextColor="#1C9DCC"
+                                    VerticalOptions="Center" />
+                            </StackLayout>
+                        </Grid>
+                        <!--<controls:CardView
+                        BackgroundColor="Green"
+                        BorderColor="#1C9DCC"
+                        Margin="0"
+                        Grid.Row="0"
+                        Grid.Column="0"
+                    CardImageColor="#1C9DCC"
+                    CardImageGlyph="{StaticResource IconInventory2}"
+                    TapCommand="{Binding InventoryCommand}"
+                    Text="Inventory"
+                    TextColor="Black" />
+                        <controls:CardView
+                    BorderColor="#1C9DCC"
+                        Margin="0"
+                        BackgroundColor="Red"
+
+                        Grid.Row="0"
+                        Grid.Column="1"
+                    CardImageColor="#1C9DCC"
+                    CardImageGlyph="{StaticResource IconInventory2}"
+                    TapCommand="{Binding InventoryCommand}"
+                    Text="Scan Item"
+                    TextColor="Black" />-->
+                    </Grid>
+                </Grid>
+                <StackLayout Padding="15,5,15,25">
+                    <controls:CardView
+                        BorderColor="#E2E2E2"
+                        CardImageColor="#1C9DCC"
+                        CardImageGlyph="{StaticResource IconLocalShipping}"
+                        TapCommand="{Binding POReceiveCommand}"
+                        Text="PO Receive"
+                        TextColor="Black" />
+
+                    <controls:CardView
+                        BorderColor="#E2E2E2"
+                        CardImageColor="#1C9DCC"
+                        CardImageGlyph="{StaticResource IconReceiptLong}"
+                        TapCommand="{Binding ReceiptCommand}"
+                        Text="Receipt"
+                        TextColor="Black" />
+
+                    <controls:CardView
+                        BorderColor="#E2E2E2"
+                        CardImageColor="#1C9DCC"
+                        CardImageGlyph="{StaticResource IconReceiptLong}"
+                        TapCommand="{Binding PalletizeCommand}"
+                        Text="Palletize"
+                        TextColor="Black" />
+                    
+                    <controls:CardView
+                        BorderColor="#E2E2E2"
+                        CardImageColor="#1C9DCC"
+                        CardImageGlyph="{StaticResource IconOutput}"
+                        TapCommand="{Binding PutAwayCommand}"
+                        Text="Put Away"
+                        TextColor="Black" />
+
+                    <controls:CardView
+                        BorderColor="#E2E2E2"
+                        CardImageColor="#1C9DCC"
+                        CardImageGlyph="{StaticResource IconInput}"
+                        TapCommand="{Binding PickingCommand}"
+                        Text="Picking"
+                        TextColor="Black" />
+
+                    <controls:CardView
+                        BorderColor="#E2E2E2"
+                        CardImageColor="#1C9DCC"
+                        CardImageGlyph="{StaticResource IconMoveDown}"
+                        TapCommand="{Binding TransferCommand}"
+                        Text="Transfer"
+                        TextColor="Black" />
+
+
+                    <controls:CardView
+                        BorderColor="#E2E2E2"
+                        CardImageColor="#1C9DCC"
+                        CardImageGlyph="{StaticResource IconMoveDown}"
+                        TapCommand="{Binding RecallCommand}"
+                        Text="Recall"
+                        TextColor="Black" />
+
+                    <!--<controls:CardView
+                        BorderColor="{StaticResource Primary}"
+                        CardImageColor="{StaticResource Primary}"
+                        CardImageGlyph="{StaticResource IconDocumentScanner}"
+                        TapCommand="{Binding ScanCommand}"
+                        Text="Scan"
+                        TextColor="{StaticResource Primary}" />-->
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

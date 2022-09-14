@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.PurchaseOrders.PurchaseOrderReceivePrintView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:cards="clr-namespace:Syncfusion.XForms.Cards;assembly=Syncfusion.Cards.XForms"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.PurchaseOrders"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    xmlns:zxing="clr-namespace:ZXing.Net.Mobile.Forms;assembly=ZXing.Net.Mobile.Forms"
+    xmlns:zxingcommon="clr-namespace:ZXing.Common;assembly=zxing.portable"
+    x:DataType="vm:PurchaseOrderReceivePrintViewModel"
+    Shell.PresentationMode="Modal">
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <StackLayout
+            Padding="5"
+            HorizontalOptions="CenterAndExpand"
+            VerticalOptions="CenterAndExpand">
+            <cards:SfCardView
+                Padding="20"
+                BorderColor="Black"
+                BorderThickness="1"
+                CornerRadius="0">
+                <StackLayout>
+                    <Label
+                        FontSize="Large"
+                        Text="Olive Banquet 8x8"
+                        TextColor="Black" />
+                    <Label
+                        FontSize="Large"
+                        Text="Item 59807"
+                        TextColor="Black" />
+                    <zxing:ZXingBarcodeImageView
+                        BarcodeFormat="CODE_128"
+                        BarcodeValue="1"
+                        HeightRequest="200"
+                        WidthRequest="500">
+                        <zxing:ZXingBarcodeImageView.BarcodeOptions>
+                            <zxingcommon:EncodingOptions Width="500" Height="200" />
+                        </zxing:ZXingBarcodeImageView.BarcodeOptions>
+                    </zxing:ZXingBarcodeImageView>
+                </StackLayout>
+            </cards:SfCardView>
+        </StackLayout>
+
+    </ContentPage.Content>
+</ContentPage>

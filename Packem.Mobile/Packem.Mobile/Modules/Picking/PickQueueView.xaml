@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.Picking.PickQueueView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:dataGrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
+    xmlns:model="clr-namespace:Packem.Mobile.ViewModels.Picking"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Picking"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    Title="Pick Queue"
+    x:DataType="vm:PickQueueViewModel"
+    Shell.TitleColor="{StaticResource Primary}">
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <Grid>
+            <ScrollView>
+                <Grid RowDefinitions="Auto,*">
+                    <controls:EntryWithScanView
+                        Grid.Row="0"
+                        Padding="15,15,15,0"
+                        Hint="Pick Queue Lookup"
+                        HorizontalOptions="StartAndExpand"
+                        ScanCommand="{Binding ScanCommand}"
+                        UserStoppedTypingCommand="{Binding SearchCommand}" />
+                    <StackLayout Grid.Row="1" IsVisible="{Binding HasRecord, Converter={xct:InvertedBoolConverter}}">
+                        <controls:LabelForNoRecordFound Padding="0,55,0,0" Text="NO RECORD FOUND" />
+                    </StackLayout>
+                    <dataGrid:SfDataGrid
+                        Grid.Row="1"
+                        Padding="0,0,0,10"
+                        IsVisible="{Binding HasRecord}"
+                        ItemsSource="{Binding SaleOrders}"
+                        Style="{StaticResource SfDataGridStyle}">
+                        <dataGrid:SfDataGrid.Behaviors>
+                            <xct:EventToCommandBehavior Command="{Binding GridTapCommand}" EventName="SelectionChanged" />
+                        </dataGrid:SfDataGrid.Behaviors>
+                        <dataGrid:SfDataGrid.GridStyle>
+                            <dataGrid:DefaultStyle
+                                GridCellBorderWidth="{StaticResource SfDataGridGridCellBorderWidth}"
+                                GridLinesVisibility="{StaticResource SfDataGridGridLinesVisibility}"
+                                HeaderBackgroundColor="{StaticResource SfDataGridHeaderBackgroundColor}"
+                                HeaderForegroundColor="{StaticResource SfDataGridHeaderForegroundColor}" />
+                        </dataGrid:SfDataGrid.GridStyle>
+                        <dataGrid:SfDataGrid.Columns x:TypeArguments="dataGrid:Columns">
+                            <dataGrid:GridTextColumn
+                                x:DataType="model:SaleOrderPickQueueLookupViewModel"
+                                DisplayBinding="{Binding SaleOrderNo}"
+                                HeaderText="Order"
+                                MappingName="SaleOrderNo" />
+                            <dataGrid:GridTextColumn
+                                x:DataType="model:SaleOrderPickQueueLookupViewModel"
+                                DisplayBinding="{Binding PickingStatus}"
+                                HeaderText="Status"
+                                MappingName="PickingStatus" />
+                            <dataGrid:GridTextColumn
+                                x:DataType="model:SaleOrderPickQueueLookupViewModel"
+                                DisplayBinding="{Binding Items}"
+                                HeaderText="Items"
+                                MappingName="Items" />
+                            <dataGrid:GridTextColumn
+                                x:DataType="model:SaleOrderPickQueueLookupViewModel"
+                                DisplayBinding="{Binding Bins}"
+                                HeaderText="Location(s)"
+                                MappingName="Bins" />
+                        </dataGrid:SfDataGrid.Columns>
+                    </dataGrid:SfDataGrid>
+                </Grid>
+            </ScrollView>
+
+            <controls:ActivityIndicatorView Grid.Row="0" ActivityIndicatorViewModel="{Binding ActivityIndicatorViewModel}" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

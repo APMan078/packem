@@ -1,0 +1,122 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.Inventories.InventoryView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:dataGrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
+    xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+    xmlns:model="clr-namespace:Packem.Mobile.ViewModels.Inventories"
+    xmlns:numericBox="clr-namespace:Syncfusion.SfNumericTextBox.XForms;assembly=Syncfusion.SfNumericTextBox.XForms"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Inventories"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    Title="Inventory"
+    x:DataType="vm:InventoryViewModel"
+    Shell.TitleColor="{StaticResource Primary}">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:InvertedBoolConverter x:Key="InvertedBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <AbsoluteLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+            <StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+                <ScrollView>
+                    <StackLayout>
+                        <controls:EntryWithScanAndSearchView
+                            Padding="15,15,15,-10"
+                            Hint="Item SKU"
+                            ScanCommand="{Binding ScanCommand}"
+                            SearchCommand="{Binding SearchCommand}"
+                            Text="{Binding Inventory.Item.SKU, Mode=TwoWay}" />
+                        <inputLayout:SfTextInputLayout
+                            Padding="15,0,15,-10"
+                            ContainerType="Outlined"
+                            Hint="Item Desc">
+                            <Entry IsEnabled="False" Text="{Binding Inventory.Item.Description}" />
+                        </inputLayout:SfTextInputLayout>
+                        <inputLayout:SfTextInputLayout
+                            Padding="15,0,15,-10"
+                            ContainerType="Outlined"
+                            Hint="UOM">
+                            <Entry IsEnabled="False" Text="{Binding Inventory.Item.UOM}" />
+                        </inputLayout:SfTextInputLayout>
+                        <inputLayout:SfTextInputLayout
+                            Padding="15,0,15,-10"
+                            ContainerType="Outlined"
+                            Hint="Available">
+                            <numericBox:SfNumericTextBox
+                                AllowDefaultDecimalDigits="False"
+                                AllowNull="True"
+                                IsEnabled="False"
+                                Value="{Binding Inventory.Item.QtyOnHand}" />
+                        </inputLayout:SfTextInputLayout>
+                        <inputLayout:SfTextInputLayout
+                            Padding="15,0,15,15"
+                            ContainerType="Outlined"
+                            Hint="On Order">
+                            <numericBox:SfNumericTextBox
+                                AllowDefaultDecimalDigits="False"
+                                AllowNull="True"
+                                IsEnabled="False"
+                                Value="{Binding Inventory.Item.OnOrder}" />
+                        </inputLayout:SfTextInputLayout>
+                        <StackLayout Padding="0,0,0,10" IsVisible="{Binding ScanItemButtonIsVisible, Converter={StaticResource InvertedBoolConverter}}">
+                            <dataGrid:SfDataGrid
+                                ItemsSource="{Binding Inventory.BinZones}"
+                                SelectionMode="None"
+                                Style="{StaticResource SfDataGridStyle}">
+                                <dataGrid:SfDataGrid.GridStyle>
+                                    <dataGrid:DefaultStyle
+                                        GridCellBorderWidth="{StaticResource SfDataGridGridCellBorderWidth}"
+                                        GridLinesVisibility="{StaticResource SfDataGridGridLinesVisibility}"
+                                        HeaderBackgroundColor="{StaticResource SfDataGridHeaderBackgroundColor}"
+                                        HeaderForegroundColor="{StaticResource SfDataGridHeaderForegroundColor}" />
+                                </dataGrid:SfDataGrid.GridStyle>
+                                <dataGrid:SfDataGrid.Columns x:TypeArguments="dataGrid:Columns">
+                                    <dataGrid:GridTextColumn
+                                        x:DataType="model:BinZoneViewModel"
+                                        DisplayBinding="{Binding Zone}"
+                                        HeaderText="Area"
+                                        MappingName="Zone" />
+                                    <dataGrid:GridTextColumn
+                                        x:DataType="model:BinZoneViewModel"
+                                        DisplayBinding="{Binding Bin}"
+                                        HeaderText="Location"
+                                        MappingName="Bin" />
+                                    <dataGrid:GridTextColumn
+                                        x:DataType="model:BinZoneViewModel"
+                                        DisplayBinding="{Binding Qty}"
+                                        HeaderText="On Hand"
+                                        MappingName="Qty" />
+                                    <dataGrid:GridTextColumn
+                                        x:DataType="model:BinZoneViewModel"
+                                        DisplayBinding="{Binding LotNo}"
+                                        HeaderText="Lot No"
+                                        MappingName="LotNo" />
+                                    <dataGrid:GridTextColumn
+                                        x:DataType="model:BinZoneViewModel"
+                                        DisplayBinding="{Binding ExpirationDate, StringFormat='{0:MM/dd/yyyy}'}"
+                                        HeaderText="Exp Date"
+                                        MappingName="ExpirationDate" />
+                                </dataGrid:SfDataGrid.Columns>
+                            </dataGrid:SfDataGrid>
+                        </StackLayout>
+                    </StackLayout>
+                </ScrollView>
+            </StackLayout>
+
+            <controls:ScanItemButtonView
+                Padding="10,0,10,20"
+                AbsoluteLayout.LayoutBounds="0.5, 1, 200, 55"
+                AbsoluteLayout.LayoutFlags="PositionProportional"
+                IsVisible="{Binding ScanItemButtonIsVisible}"
+                ScanItemCommand="{Binding ScanCommand}"
+                Text="SCAN ITEM"
+                VerticalOptions="End" />
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

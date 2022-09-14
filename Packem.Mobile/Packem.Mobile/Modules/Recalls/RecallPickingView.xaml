@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.Recalls.RecallPickingView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:converters="clr-namespace:Packem.Mobile.Common.Converters"
+    xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+    xmlns:numericBox="clr-namespace:Syncfusion.SfNumericTextBox.XForms;assembly=Syncfusion.SfNumericTextBox.XForms"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Recalls"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    Title="Recall"
+    x:DataType="vm:RecallPickingViewModel"
+    Shell.TitleColor="{StaticResource Primary}">
+    <ContentPage.Resources>
+        <converters:FirstValidationErrorConverter x:Key="FirstValidationErrorConverter" />
+    </ContentPage.Resources>
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <Grid>
+            <ScrollView>
+                <StackLayout Padding="0,15,0,15">
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        Hint="SKU"
+                        HorizontalOptions="StartAndExpand">
+                        <Entry IsEnabled="False" Text="{Binding RecallQueueAndDetail.Recall.ItemSKU}" />
+                    </inputLayout:SfTextInputLayout>
+
+                    <StackLayout Padding="15,0,15,-10" Orientation="Horizontal">
+                        <inputLayout:SfTextInputLayout
+                            ContainerType="Outlined"
+                            Hint="Description"
+                            HorizontalOptions="FillAndExpand">
+                            <Entry IsEnabled="False" Text="{Binding RecallQueueAndDetail.Recall.ItemDescription}" />
+                        </inputLayout:SfTextInputLayout>
+                        <inputLayout:SfTextInputLayout
+                            ContainerType="Outlined"
+                            Hint="UOM"
+                            HorizontalOptions="End">
+                            <Entry IsEnabled="False" Text="{Binding RecallQueueAndDetail.Recall.ItemUOM}" />
+                        </inputLayout:SfTextInputLayout>
+                    </StackLayout>
+
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        Hint="Area"
+                        HorizontalOptions="StartAndExpand">
+                        <Entry IsEnabled="False" Text="{Binding RecallQueueAndDetail.RecallDetail.ZoneName}" />
+                    </inputLayout:SfTextInputLayout>
+
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        Hint="Location"
+                        HorizontalOptions="StartAndExpand">
+                        <Entry IsEnabled="False" Text="{Binding RecallQueueAndDetail.RecallDetail.BinName}" />
+                    </inputLayout:SfTextInputLayout>
+
+                    <StackLayout>
+                        <StackLayout HeightRequest="{StaticResource SeparatorHeightRequest}">
+                            <BoxView Style="{StaticResource SeparatorBoxView}" />
+                        </StackLayout>
+                    </StackLayout>
+
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        Hint="Qty to Recall">
+                        <numericBox:SfNumericTextBox
+                            AllowDefaultDecimalDigits="False"
+                            AllowNull="True"
+                            IsEnabled="False"
+                            Value="{Binding RecallQueueAndDetail.RecallDetail.Remaining}" />
+                    </inputLayout:SfTextInputLayout>
+
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        ErrorText="{Binding PickQty.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                        HasError="{Binding PickQty.IsValid, Converter={xct:InvertedBoolConverter}}"
+                        Hint="Qty Picked*">
+                        <numericBox:SfNumericTextBox
+                            AllowDefaultDecimalDigits="False"
+                            AllowNull="True"
+                            Value="{Binding PickQty.Value}">
+                            <numericBox:SfNumericTextBox.Behaviors>
+                                <xct:EventToCommandBehavior Command="{Binding PickQtyUnfocusedCommand}" EventName="Unfocused" />
+                            </numericBox:SfNumericTextBox.Behaviors>
+                        </numericBox:SfNumericTextBox>
+                    </inputLayout:SfTextInputLayout>
+
+                    <StackLayout
+                        Padding="15,10,15,0"
+                        HorizontalOptions="EndAndExpand"
+                        Orientation="Horizontal">
+                        <buttons:SfButton
+                            Command="{Binding UpdateCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            Text="UPDATE"
+                            WidthRequest="80" />
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+
+            <controls:ActivityIndicatorView Grid.Row="0" ActivityIndicatorViewModel="{Binding ActivityIndicatorViewModel}" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

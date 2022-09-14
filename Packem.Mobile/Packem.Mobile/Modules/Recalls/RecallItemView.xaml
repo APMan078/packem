@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.Recalls.RecallItemView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:converters="clr-namespace:Packem.Mobile.Common.Converters"
+    xmlns:dataGrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
+    xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+    xmlns:model="clr-namespace:Packem.Mobile.ViewModels.Recalls"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Recalls"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    Title="Recall"
+    x:DataType="vm:RecallItemViewModel"
+    Shell.TitleColor="{StaticResource Primary}">
+    <ContentPage.Resources>
+        <converters:CompletedToColorConverter x:Key="CompletedToColorConverter" />
+    </ContentPage.Resources>
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <AbsoluteLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+            <StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+                <Grid RowDefinitions="Auto,*" VerticalOptions="StartAndExpand">
+                    <StackLayout Grid.Row="0" Padding="0,15,0,0">
+                        <inputLayout:SfTextInputLayout
+                            Padding="15,0,15,-10"
+                            ContainerType="Outlined"
+                            Hint="SKU"
+                            HorizontalOptions="StartAndExpand">
+                            <Entry IsEnabled="False" Text="{Binding Recall.ItemSKU}" />
+                        </inputLayout:SfTextInputLayout>
+
+                        <StackLayout Padding="15,0,15,-10" Orientation="Horizontal">
+                            <inputLayout:SfTextInputLayout
+                                ContainerType="Outlined"
+                                Hint="Description"
+                                HorizontalOptions="FillAndExpand">
+                                <Entry IsEnabled="False" Text="{Binding Recall.ItemDescription}" />
+                            </inputLayout:SfTextInputLayout>
+                            <inputLayout:SfTextInputLayout
+                                ContainerType="Outlined"
+                                Hint="UOM"
+                                HorizontalOptions="End">
+                                <Entry IsEnabled="False" Text="{Binding Recall.ItemUOM}" />
+                            </inputLayout:SfTextInputLayout>
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout Grid.Row="1" IsVisible="{Binding HasRecord, Converter={xct:InvertedBoolConverter}}">
+                        <controls:LabelForNoRecordFound Padding="0,55,0,0" Text="NO RECORD FOUND" />
+                    </StackLayout>
+                    <dataGrid:SfDataGrid
+                        Grid.Row="1"
+                        IsVisible="{Binding HasRecord}"
+                        ItemsSource="{Binding RecallDetails}"
+                        Style="{StaticResource SfDataGridStyle}">
+                        <dataGrid:SfDataGrid.Behaviors>
+                            <xct:EventToCommandBehavior Command="{Binding GridTapCommand}" EventName="SelectionChanged" />
+                        </dataGrid:SfDataGrid.Behaviors>
+                        <dataGrid:SfDataGrid.GridStyle>
+                            <dataGrid:DefaultStyle
+                                GridCellBorderWidth="{StaticResource SfDataGridGridCellBorderWidth}"
+                                GridLinesVisibility="{StaticResource SfDataGridGridLinesVisibility}"
+                                HeaderBackgroundColor="{StaticResource SfDataGridHeaderBackgroundColor}"
+                                HeaderForegroundColor="{StaticResource SfDataGridHeaderForegroundColor}" />
+                        </dataGrid:SfDataGrid.GridStyle>
+                        <dataGrid:SfDataGrid.Columns x:TypeArguments="dataGrid:Columns">
+                            <dataGrid:GridTextColumn
+                                x:DataType="model:RecallDetailViewModel"
+                                DisplayBinding="{Binding BinName}"
+                                HeaderText="Location"
+                                MappingName="BinName" />
+                            <dataGrid:GridTextColumn
+                                x:DataType="model:RecallDetailViewModel"
+                                DisplayBinding="{Binding ZoneName}"
+                                HeaderText="Area"
+                                MappingName="ZoneName" />
+                            <dataGrid:GridTemplateColumn
+                                AllowSorting="False"
+                                HeaderText="Qty"
+                                HeaderTextAlignment="End"
+                                MappingName=".">
+                                <dataGrid:GridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:DataType="model:RecallDetailViewModel">
+                                        <StackLayout Padding="5" HorizontalOptions="End">
+                                            <StackLayout HorizontalOptions="End" Orientation="Horizontal">
+                                                <Label
+                                                    Text="{Binding Received}"
+                                                    XAlign="Center"
+                                                    YAlign="Center" />
+                                                <Label
+                                                    Text="/"
+                                                    XAlign="Center"
+                                                    YAlign="Center" />
+                                                <Label
+                                                    Text="{Binding Qty}"
+                                                    XAlign="Center"
+                                                    YAlign="Center" />
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </dataGrid:GridTemplateColumn.CellTemplate>
+                            </dataGrid:GridTemplateColumn>
+                        </dataGrid:SfDataGrid.Columns>
+                    </dataGrid:SfDataGrid>
+                </Grid>
+                <StackLayout
+                    Grid.Row="2"
+                    Padding="15,0,15,15"
+                    HorizontalOptions="EndAndExpand"
+                    Orientation="Horizontal">
+                    <buttons:SfButton
+                        Command="{Binding StartCommand}"
+                        IsEnabled="{Binding IsNotBusy}"
+                        IsVisible="{Binding StartVisible}"
+                        Text="START"
+                        WidthRequest="80" />
+                    <buttons:SfButton
+                        Command="{Binding PauseCommand}"
+                        IsEnabled="{Binding IsNotBusy}"
+                        IsVisible="{Binding PauseVisible}"
+                        Text="PAUSE"
+                        WidthRequest="80" />
+                </StackLayout>
+            </StackLayout>
+
+            <controls:ActivityIndicatorView
+                AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                AbsoluteLayout.LayoutFlags="All"
+                ActivityIndicatorViewModel="{Binding ActivityIndicatorViewModel}" />
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

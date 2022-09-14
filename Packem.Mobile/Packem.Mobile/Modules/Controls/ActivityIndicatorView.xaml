@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<AbsoluteLayout
+    x:Class="Packem.Mobile.Modules.Controls.ActivityIndicatorView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Controls"
+    x:Name="activityIndicatorViewPage"
+    x:DataType="vm:ActivityIndicatorViewModel"
+    AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+    AbsoluteLayout.LayoutFlags="All"
+    BackgroundColor="Transparent"
+    Shell.FlyoutItemIsVisible="False"
+    Shell.NavBarIsVisible="False">
+    <StackLayout
+        x:Name="innerContainer"
+        AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+        AbsoluteLayout.LayoutFlags="All"
+        BackgroundColor="{StaticResource OnPrimary}"
+        HorizontalOptions="FillAndExpand"
+        IsVisible="{Binding Source={x:Reference activityIndicatorViewPage}, Path=IsVisible}"
+        Opacity="0.8"
+        VerticalOptions="FillAndExpand" />
+    <StackLayout
+        AbsoluteLayout.LayoutBounds="0.5, 0.5, 400, 100"
+        AbsoluteLayout.LayoutFlags="PositionProportional"
+        BackgroundColor="Transparent">
+        <Label
+            x:Name="labelMessage"
+            HorizontalOptions="Center"
+            LineBreakMode="TailTruncation"
+            TextColor="{StaticResource Primary}"
+            VerticalOptions="Center" />
+        <ActivityIndicator
+            HorizontalOptions="Center"
+            IsRunning="{Binding Source={x:Reference activityIndicatorViewPage}, Path=IsVisible}"
+            VerticalOptions="Center"
+            Color="{StaticResource Primary}" />
+    </StackLayout>
+</AbsoluteLayout>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="launcher_background">#DE4A50</color>
+    <color name="colorPrimary">#DE4A50</color>
+    <color name="colorPrimaryDark">#DE4A50</color>
+    <color name="colorAccent">#DE4A50</color>
+</resources>

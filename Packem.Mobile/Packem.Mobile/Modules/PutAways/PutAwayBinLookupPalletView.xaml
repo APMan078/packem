@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.PutAways.PutAwayBinLookupPalletView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:converters="clr-namespace:Packem.Mobile.Common.Converters"
+    xmlns:dataGrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
+    xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+    xmlns:model="clr-namespace:Packem.Mobile.ViewModels.Core"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.PutAways"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    Title="Location Lookup"
+    x:DataType="vm:PutAwayBinLookupPalletViewModel"
+    Shell.TitleColor="{StaticResource Primary}">
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:StringNullOrEmptyToTextConverter x:Key="StringNullOrEmptyToTextConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid>
+            <ScrollView>
+                <Grid RowDefinitions="Auto,*">
+                    <inputLayout:SfTextInputLayout
+                        Grid.Row="0"
+                        Padding="15,15,15,0"
+                        ContainerType="Outlined"
+                        Hint="Search">
+                        <Entry>
+                            <Entry.Behaviors>
+                                <xct:UserStoppedTypingBehavior Command="{Binding SearchCommand}" StoppedTypingTimeThreshold="500" />
+                            </Entry.Behaviors>
+                        </Entry>
+                    </inputLayout:SfTextInputLayout>
+                    <StackLayout Grid.Row="1" IsVisible="{Binding HasRecord, Converter={xct:InvertedBoolConverter}}">
+                        <controls:LabelForNoRecordFound Padding="0,55,0,0" Text="NO RECORD FOUND" />
+                    </StackLayout>
+                    <dataGrid:SfDataGrid
+                        Grid.Row="1"
+                        Padding="0,0,0,10"
+                        IsVisible="{Binding HasRecord}"
+                        ItemsSource="{Binding Bins}"
+                        Style="{StaticResource SfDataGridStyle}">
+                        <dataGrid:SfDataGrid.Behaviors>
+                            <xct:EventToCommandBehavior Command="{Binding GridTapCommand}" EventName="SelectionChanged" />
+                        </dataGrid:SfDataGrid.Behaviors>
+                        <dataGrid:SfDataGrid.GridStyle>
+                            <dataGrid:DefaultStyle
+                                GridCellBorderWidth="{StaticResource SfDataGridGridCellBorderWidth}"
+                                GridLinesVisibility="{StaticResource SfDataGridGridLinesVisibility}"
+                                HeaderBackgroundColor="{StaticResource SfDataGridHeaderBackgroundColor}"
+                                HeaderForegroundColor="{StaticResource SfDataGridHeaderForegroundColor}" />
+                        </dataGrid:SfDataGrid.GridStyle>
+                        <dataGrid:SfDataGrid.Columns x:TypeArguments="dataGrid:Columns">
+                            <dataGrid:GridTextColumn
+                                x:DataType="model:BinOptionalPalletViewModel"
+                                DisplayBinding="{Binding Name}"
+                                HeaderText="Location"
+                                MappingName="Name" />
+                            <dataGrid:GridTextColumn
+                                x:DataType="model:BinOptionalPalletViewModel"
+                                DisplayBinding="{Binding PalletCount}"
+                                HeaderText="Pallet(s)"
+                                MappingName="PalletCount" />
+                            <dataGrid:GridTextColumn
+                                x:DataType="model:BinOptionalPalletViewModel"
+                                DisplayBinding="{Binding EachCount}"
+                                HeaderText="Each(s)"
+                                MappingName="EachCount" />
+                            <dataGrid:GridTextColumn
+                                x:DataType="model:BinOptionalPalletViewModel"
+                                DisplayBinding="{Binding TotalQty}"
+                                HeaderText="Qty"
+                                MappingName="TotalQty" />
+                        </dataGrid:SfDataGrid.Columns>
+                    </dataGrid:SfDataGrid>
+                </Grid>
+            </ScrollView>
+
+            <controls:ActivityIndicatorView Grid.Row="0" ActivityIndicatorViewModel="{Binding ActivityIndicatorViewModel}" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

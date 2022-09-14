@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<inputLayout:SfTextInputLayout
+    x:Class="Packem.Mobile.Modules.Controls.EntryWithScanAndSearchView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Name="EntryWithScanAndSearchViewPage"
+    ContainerType="Outlined"
+    FocusedColor="{StaticResource Secondary}"
+    UnfocusedColor="{StaticResource SecondaryVariant}">
+    <Entry x:Name="entryText">
+        <Entry.Behaviors>
+            <xct:EventToCommandBehavior Command="{Binding Source={x:Reference EntryWithScanAndSearchViewPage}, Path=UnfocusedCommand}" EventName="Unfocused" />
+        </Entry.Behaviors>
+    </Entry>
+    <inputLayout:SfTextInputLayout.TrailingView>
+        <StackLayout
+            Orientation="Horizontal"
+            VerticalOptions="Center"
+            WidthRequest="100">
+            <buttons:SfButton
+                x:Name="buttonScan"
+                BackgroundColor="Transparent"
+                FontSize="Large"
+                HorizontalOptions="StartAndExpand"
+                ShowIcon="True"
+                Style="{StaticResource NoStyle}">
+                <buttons:SfButton.Image>
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource
+                                FontFamily="{DynamicResource FontMaterialIconsOutlinedRegular}"
+                                Glyph="{StaticResource IconDocumentScanner}"
+                                Color="{StaticResource Secondary}" />
+                        </Image.Source>
+                    </Image>
+                </buttons:SfButton.Image>
+            </buttons:SfButton>
+            <buttons:SfButton
+                x:Name="buttonSearch"
+                BackgroundColor="Transparent"
+                FontSize="Large"
+                HorizontalOptions="End"
+                ShowIcon="True"
+                Style="{StaticResource NoStyle}">
+                <buttons:SfButton.Image>
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource
+                                FontFamily="{DynamicResource FontMaterialIconsOutlinedRegular}"
+                                Glyph="{StaticResource IconSearch}"
+                                Color="{StaticResource Secondary}" />
+                        </Image.Source>
+                    </Image>
+                </buttons:SfButton.Image>
+            </buttons:SfButton>
+        </StackLayout>
+    </inputLayout:SfTextInputLayout.TrailingView>
+</inputLayout:SfTextInputLayout>

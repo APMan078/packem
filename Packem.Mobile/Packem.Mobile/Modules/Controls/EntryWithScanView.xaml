@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<inputLayout:SfTextInputLayout
+    x:Class="Packem.Mobile.Modules.Controls.EntryWithScanView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Name="EntryWithScanViewPage"
+    ContainerType="Outlined"
+    FocusedColor="{StaticResource Secondary}"
+    UnfocusedColor="{StaticResource SecondaryVariant}">
+    <Entry x:Name="entryText">
+        <Entry.Behaviors>
+            <xct:EventToCommandBehavior Command="{Binding Source={x:Reference EntryWithScanViewPage}, Path=UnfocusedCommand}" EventName="Unfocused" />
+            <xct:UserStoppedTypingBehavior Command="{Binding Source={x:Reference EntryWithScanViewPage}, Path=UserStoppedTypingCommand}" StoppedTypingTimeThreshold="500" />
+        </Entry.Behaviors>
+    </Entry>
+    <inputLayout:SfTextInputLayout.TrailingView>
+        <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+            <buttons:SfButton
+                x:Name="buttonScan"
+                BackgroundColor="Transparent"
+                FontSize="Large"
+                HorizontalOptions="EndAndExpand"
+                ShowIcon="True"
+                Style="{StaticResource NoStyle}">
+                <buttons:SfButton.Image>
+                    <Image>
+                        <Image.Source>
+                            <FontImageSource
+                                FontFamily="{DynamicResource FontMaterialIconsOutlinedRegular}"
+                                Glyph="{StaticResource IconDocumentScanner}"
+                                Color="{StaticResource Secondary}" />
+                        </Image.Source>
+                    </Image>
+                </buttons:SfButton.Image>
+            </buttons:SfButton>
+        </StackLayout>
+    </inputLayout:SfTextInputLayout.TrailingView>
+</inputLayout:SfTextInputLayout>

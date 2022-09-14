@@ -1,0 +1,279 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.Palletize.PalletizeView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:converters="clr-namespace:Packem.Mobile.Common.Converters"
+    xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+    xmlns:listView="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+    xmlns:model="clr-namespace:Packem.Mobile.ViewModels.Palletize"
+    xmlns:numericBox="clr-namespace:Syncfusion.SfNumericTextBox.XForms;assembly=Syncfusion.SfNumericTextBox.XForms"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Palletize"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Name="PalletizeViewPage"
+    Title="Palletize"
+    x:DataType="vm:PalletizeViewModel"
+    Shell.TitleColor="{StaticResource Primary}">
+    <ContentPage.Resources>
+        <converters:FirstValidationErrorConverter x:Key="FirstValidationErrorConverter" />
+    </ContentPage.Resources>
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <AbsoluteLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+            <StackLayout AbsoluteLayout.LayoutBounds="0, 0, 1, 1" AbsoluteLayout.LayoutFlags="All">
+                <Grid RowDefinitions="Auto,*" VerticalOptions="StartAndExpand">
+                    <StackLayout Grid.Row="0" Padding="0,15,0,0">
+                        <controls:EntryWithScanAndSearchView
+                            Padding="15,0,15,-10"
+                            ErrorText="{Binding LP.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                            HasError="{Binding LP.IsValid, Converter={xct:InvertedBoolConverter}}"
+                            Hint="License Plate / Tag Lookup*"
+                            ScanCommand="{Binding ScanLPCommand}"
+                            SearchCommand="{Binding SearchLPCommand}"
+                            Text="{Binding LP.Value.LicensePlateNo, Mode=TwoWay}"
+                            UnfocusedCommand="{Binding LPUnfocusedCommand}" />
+                    </StackLayout>
+                    <StackLayout Grid.Row="1" IsVisible="{Binding HasRecord, Converter={xct:InvertedBoolConverter}}">
+                        <controls:LabelForNoRecordFound Padding="0,55,0,0" Text="{Binding NoRecordText}" />
+                    </StackLayout>
+                    <listView:SfListView
+                        Grid.Row="1"
+                        Padding="15,0,15,0"
+                        AutoFitMode="Height"
+                        IsVisible="{Binding HasRecord}"
+                        ItemsSource="{Binding Items}"
+                        SelectionBackgroundColor="Transparent">
+                        <listView:SfListView.ItemTemplate>
+                            <DataTemplate x:DataType="model:PalletizeItemViewModel">
+                                <StackLayout>
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label
+                                            FontSize="Body"
+                                            HorizontalOptions="StartAndExpand"
+                                            Text="{Binding ItemDescription}" />
+                                        <Label HorizontalOptions="End" Text="{Binding ItemSKU, StringFormat='SKU: {0}'}" />
+                                    </StackLayout>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="33*" />
+                                            <ColumnDefinition Width="33*" />
+                                            <ColumnDefinition Width="33*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <inputLayout:SfTextInputLayout
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            ContainerType="Outlined"
+                                            Hint="Cases"
+                                            HorizontalOptions="FillAndExpand">
+                                            <numericBox:SfNumericTextBox
+                                                AllowDefaultDecimalDigits="False"
+                                                AllowNull="True"
+                                                IsEnabled="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.AddSKUVisible}"
+                                                Value="{Binding Cases}" />
+                                        </inputLayout:SfTextInputLayout>
+
+                                        <inputLayout:SfTextInputLayout
+                                            Grid.Row="0"
+                                            Grid.Column="1"
+                                            ContainerType="Outlined"
+                                            Hint="Ea/Case"
+                                            HorizontalOptions="FillAndExpand">
+                                            <numericBox:SfNumericTextBox
+                                                AllowDefaultDecimalDigits="False"
+                                                AllowNull="True"
+                                                IsEnabled="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.AddSKUVisible}"
+                                                Value="{Binding EACase}" />
+                                        </inputLayout:SfTextInputLayout>
+
+                                        <inputLayout:SfTextInputLayout
+                                            Grid.Row="0"
+                                            Grid.Column="2"
+                                            ContainerType="Outlined"
+                                            Hint="Total Qty*"
+                                            HorizontalOptions="FillAndExpand">
+                                            <numericBox:SfNumericTextBox
+                                                AllowDefaultDecimalDigits="False"
+                                                AllowNull="True"
+                                                IsEnabled="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.AddSKUVisible}"
+                                                Value="{Binding TotalQty}">
+                                                <numericBox:SfNumericTextBox.Behaviors>
+                                                    <xct:EventToCommandBehavior
+                                                        Command="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.ItemTotalQtyUnfocusedCommand}"
+                                                        CommandParameter="{Binding .}"
+                                                        EventName="Unfocused" />
+                                                </numericBox:SfNumericTextBox.Behaviors>
+                                            </numericBox:SfNumericTextBox>
+                                        </inputLayout:SfTextInputLayout>
+                                    </Grid>
+                                    <Grid Padding="0,-30,0,0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="33*" />
+                                            <ColumnDefinition Width="33*" />
+                                            <ColumnDefinition Width="33*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <inputLayout:SfTextInputLayout
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            ContainerType="Outlined"
+                                            Hint="Lot No"
+                                            HorizontalOptions="FillAndExpand"
+                                            IsVisible="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.AddSKUVisible}">
+                                            <combobox:SfComboBox
+                                                AllowFiltering="True"
+                                                DataSource="{Binding Lots}"
+                                                DisplayMemberPath="LotNo"
+                                                DropDownFooterViewHeight="40"
+                                                HeightRequest="52"
+                                                IsEditableMode="True"
+                                                IsEnabled="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.AddSKUVisible}"
+                                                NoResultsFoundText="NO RECORD FOUND"
+                                                SelectedItem="{Binding Lot}"
+                                                ShowDropDownFooterView="True"
+                                                Watermark="Lot No">
+                                                <combobox:SfComboBox.DropDownFooterView>
+                                                    <buttons:SfButton
+                                                        BackgroundColor="Transparent"
+                                                        Command="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.AddLotNoCommand}"
+                                                        CommandParameter="{Binding .}"
+                                                        HorizontalTextAlignment="Center"
+                                                        Text="ADD NEW"
+                                                        TextColor="{StaticResource Secondary}"
+                                                        VerticalOptions="Center"
+                                                        VerticalTextAlignment="Center" />
+                                                </combobox:SfComboBox.DropDownFooterView>
+                                            </combobox:SfComboBox>
+                                        </inputLayout:SfTextInputLayout>
+
+                                        <inputLayout:SfTextInputLayout
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            ContainerType="Outlined"
+                                            Hint="Lot No"
+                                            HorizontalOptions="FillAndExpand"
+                                            IsVisible="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.AddSKUVisible, Converter={xct:InvertedBoolConverter}}">
+                                            <Entry IsEnabled="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.AddSKUVisible}" Text="{Binding LotNo}" />
+                                        </inputLayout:SfTextInputLayout>
+
+                                        <inputLayout:SfTextInputLayout
+                                            Grid.Row="1"
+                                            Grid.Column="1"
+                                            ContainerType="Outlined"
+                                            Hint="Reference No"
+                                            HorizontalOptions="FillAndExpand">
+                                            <Entry IsEnabled="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.AddSKUVisible}" Text="{Binding ReferenceNo}" />
+                                        </inputLayout:SfTextInputLayout>
+
+                                        <inputLayout:SfTextInputLayout
+                                            Grid.Row="1"
+                                            Grid.Column="2"
+                                            ContainerType="Outlined"
+                                            Hint="Total Wgt"
+                                            HorizontalOptions="FillAndExpand">
+                                            <numericBox:SfNumericTextBox
+                                                AllowDefaultDecimalDigits="False"
+                                                AllowNull="True"
+                                                IsEnabled="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.AddSKUVisible}"
+                                                Value="{Binding TotalWgt}" />
+                                        </inputLayout:SfTextInputLayout>
+                                    </Grid>
+                                    <Grid Padding="0,-24,0,10" IsVisible="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.AddSKUVisible}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="70" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="66*" />
+                                            <ColumnDefinition Width="33*" />
+                                        </Grid.ColumnDefinitions>
+
+                                        <inputLayout:SfTextInputLayout
+                                            Grid.Column="0"
+                                            ContainerType="Outlined"
+                                            Hint="Supplier"
+                                            HorizontalOptions="FillAndExpand">
+                                            <combobox:SfComboBox
+                                                DataSource="{Binding Vendors}"
+                                                DisplayMemberPath="Name"
+                                                HeightRequest="52"
+                                                IsEnabled="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.AddSKUVisible}"
+                                                SelectedItem="{Binding Vendor}" />
+                                        </inputLayout:SfTextInputLayout>
+
+                                        <StackLayout Grid.Column="1" Padding="0,9,0,0">
+                                            <buttons:SfButton
+                                                Command="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.DeleteItemCommand}"
+                                                CommandParameter="{Binding .}"
+                                                Text="REMOVE"
+                                                WidthRequest="100" />
+                                        </StackLayout>
+                                    </Grid>
+                                    <Grid Padding="0,-24,0,10" IsVisible="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.AddSKUVisible, Converter={xct:InvertedBoolConverter}}">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="70" />
+                                        </Grid.RowDefinitions>
+
+                                        <inputLayout:SfTextInputLayout
+                                            Grid.Column="0"
+                                            ContainerType="Outlined"
+                                            Hint="Supplier"
+                                            HorizontalOptions="FillAndExpand">
+                                            <Entry IsEnabled="{Binding Source={x:Reference PalletizeViewPage}, Path=BindingContext.AddSKUVisible}" Text="{Binding VendorName}" />
+                                        </inputLayout:SfTextInputLayout>
+                                    </Grid>
+                                </StackLayout>
+                            </DataTemplate>
+                        </listView:SfListView.ItemTemplate>
+                    </listView:SfListView>
+                </Grid>
+
+                <StackLayout Grid.Row="2" Padding="15,0,15,15">
+                    <StackLayout Orientation="Horizontal">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="Medium"
+                            HorizontalOptions="StartAndExpand"
+                            Text="Pallet Total" />
+                        <StackLayout HorizontalOptions="End" Orientation="Horizontal">
+                            <Label FontSize="Body" Text="{Binding ItemCount, StringFormat='{0:N0} SKUs'}" />
+                            <Label
+                                Padding="20,0,0,0"
+                                FontSize="Body"
+                                Text="{Binding ItemQtyCount, StringFormat='{0:N0} EA'}" />
+                        </StackLayout>
+                    </StackLayout>
+                    <StackLayout HorizontalOptions="EndAndExpand" Orientation="Horizontal">
+                        <buttons:SfButton
+                            Command="{Binding AddSKUCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            IsVisible="{Binding AddSKUVisible}"
+                            Text="ADD SKU"
+                            WidthRequest="100" />
+                        <buttons:SfButton
+                            Command="{Binding CompleteCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            Text="COMPLETE"
+                            WidthRequest="100" />
+                    </StackLayout>
+                </StackLayout>
+
+            </StackLayout>
+
+            <controls:ActivityIndicatorView
+                AbsoluteLayout.LayoutBounds="0, 0, 1, 1"
+                AbsoluteLayout.LayoutFlags="All"
+                ActivityIndicatorViewModel="{Binding ActivityIndicatorViewModel}" />
+        </AbsoluteLayout>
+    </ContentPage.Content>
+</ContentPage>

@@ -1,0 +1,437 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.PutAways.PutAwayView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ListCollection="clr-namespace:System.Collections.Generic;assembly=netstandard"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:converters="clr-namespace:Packem.Mobile.Common.Converters"
+    xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+    xmlns:listView="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+    xmlns:model="clr-namespace:Packem.Mobile.ViewModels.PutAways"
+    xmlns:numericBox="clr-namespace:Syncfusion.SfNumericTextBox.XForms;assembly=Syncfusion.SfNumericTextBox.XForms"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.PutAways"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:Name="PutAwayViewPage"
+    Title="Put Away"
+    x:DataType="vm:PutAwayViewModel"
+    Shell.TitleColor="{StaticResource Primary}">
+    <ContentPage.Resources>
+        <converters:FirstValidationErrorConverter x:Key="FirstValidationErrorConverter" />
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding ClearCommand}"
+            IsEnabled="{Binding IsNotBusy}"
+            Order="Primary"
+            Text="Clear" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <Grid>
+            <ScrollView IsVisible="{Binding IsEach}">
+                <StackLayout>
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        ErrorText="{Binding Type.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                        HasError="{Binding Type.IsValid, Converter={xct:InvertedBoolConverter}}"
+                        Hint="Type*"
+                        HorizontalOptions="FillAndExpand">
+                        <combobox:SfComboBox HeightRequest="52" SelectedItem="{Binding Type.Value}">
+                            <combobox:SfComboBox.Behaviors>
+                                <xct:EventToCommandBehavior Command="{Binding TypeChangedCommand}" EventName="SelectionChanged" />
+                            </combobox:SfComboBox.Behaviors>
+                            <combobox:SfComboBox.ComboBoxSource>
+                                <ListCollection:List x:TypeArguments="x:String">
+                                    <x:String>Each</x:String>
+                                    <x:String>Pallet</x:String>
+                                </ListCollection:List>
+                            </combobox:SfComboBox.ComboBoxSource>
+                        </combobox:SfComboBox>
+                    </inputLayout:SfTextInputLayout>
+
+                    <controls:EntryWithScanAndSearchView
+                        Padding="15,0,15,-10"
+                        ErrorText="{Binding PA.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                        HasError="{Binding PA.IsValid, Converter={xct:InvertedBoolConverter}}"
+                        Hint="Item Lookup*"
+                        ScanCommand="{Binding ScanItemCommand}"
+                        SearchCommand="{Binding SearchItemCommand}"
+                        Text="{Binding PA.Value.SKU, Mode=TwoWay}"
+                        UnfocusedCommand="{Binding ItemUnfocusedCommand}" />
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        Hint="Description">
+                        <Entry IsEnabled="False" Text="{Binding PA.Value.Description}" />
+                    </inputLayout:SfTextInputLayout>
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        Hint="Qty to Put Away">
+                        <numericBox:SfNumericTextBox
+                            AllowDefaultDecimalDigits="False"
+                            AllowNull="True"
+                            IsEnabled="False"
+                            Value="{Binding PA.Value.Remaining}" />
+                    </inputLayout:SfTextInputLayout>
+                    <Grid Padding="15,0,15,-10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="50*" />
+                        </Grid.ColumnDefinitions>
+                        <inputLayout:SfTextInputLayout
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            ContainerType="Outlined"
+                            Hint="Lot No"
+                            HorizontalOptions="FillAndExpand">
+                            <Entry IsEnabled="False" Text="{Binding PA.Value.LotNo}" />
+                        </inputLayout:SfTextInputLayout>
+                        <inputLayout:SfTextInputLayout
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            ContainerType="Outlined"
+                            Hint="Exp Date"
+                            HorizontalOptions="FillAndExpand">
+                            <Entry IsEnabled="False" Text="{Binding PA.Value.ExpirationDate, StringFormat='{0:MM/dd/yyyy}'}" />
+                        </inputLayout:SfTextInputLayout>
+                    </Grid>
+
+                    <StackLayout>
+                        <StackLayout HeightRequest="{StaticResource SeparatorHeightRequest}">
+                            <BoxView Style="{StaticResource SeparatorBoxView}" />
+                        </StackLayout>
+                    </StackLayout>
+
+                    <StackLayout Padding="15,0,15,0">
+                        <Label FontSize="Medium" Text="Put Away" />
+                    </StackLayout>
+
+                    <controls:EntryWithSearchView
+                        Padding="15,0,15,-10"
+                        ErrorText="{Binding Zone.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                        HasError="{Binding Zone.IsValid, Converter={xct:InvertedBoolConverter}}"
+                        Hint="Area*"
+                        HorizontalOptions="StartAndExpand"
+                        SearchCommand="{Binding SearchZoneCommand}"
+                        Text="{Binding Zone.Value.Name, Mode=TwoWay}"
+                        UnfocusedCommand="{Binding ZoneUnfocusedCommand}" />
+                    <controls:EntryWithScanAndSearchView
+                        Padding="15,0,15,-10"
+                        ErrorText="{Binding Bin.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                        HasError="{Binding Bin.IsValid, Converter={xct:InvertedBoolConverter}}"
+                        Hint="Location*"
+                        ScanCommand="{Binding ScanBinCommand}"
+                        SearchCommand="{Binding SearchBinCommand}"
+                        Text="{Binding Bin.Value, Mode=TwoWay}"
+                        UnfocusedCommand="{Binding BinUnfocusedCommand}" />
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        ErrorText="{Binding QtyPutAway.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                        HasError="{Binding QtyPutAway.IsValid, Converter={xct:InvertedBoolConverter}}"
+                        Hint="Qty Put Away*">
+                        <numericBox:SfNumericTextBox
+                            AllowDefaultDecimalDigits="False"
+                            AllowNull="True"
+                            Value="{Binding QtyPutAway.Value}">
+                            <numericBox:SfNumericTextBox.Behaviors>
+                                <xct:EventToCommandBehavior Command="{Binding QtyPutAwayUnfocusedCommand}" EventName="Unfocused" />
+                            </numericBox:SfNumericTextBox.Behaviors>
+                        </numericBox:SfNumericTextBox>
+                    </inputLayout:SfTextInputLayout>
+
+                    <StackLayout
+                        Padding="15,10,15,15"
+                        HorizontalOptions="EndAndExpand"
+                        Orientation="Horizontal">
+                        <buttons:SfButton
+                            Command="{Binding PutAwayCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            Text="PUT AWAY" />
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+
+            <StackLayout IsVisible="{Binding IsEach, Converter={xct:InvertedBoolConverter}}">
+                <StackLayout IsVisible="{Binding HasRecord, Converter={xct:InvertedBoolConverter}}">
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        ErrorText="{Binding Type.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                        HasError="{Binding Type.IsValid, Converter={xct:InvertedBoolConverter}}"
+                        Hint="Type*"
+                        HorizontalOptions="FillAndExpand">
+                        <combobox:SfComboBox HeightRequest="52" SelectedItem="{Binding Type.Value}">
+                            <combobox:SfComboBox.Behaviors>
+                                <xct:EventToCommandBehavior Command="{Binding TypeChangedCommand}" EventName="SelectionChanged" />
+                            </combobox:SfComboBox.Behaviors>
+                            <combobox:SfComboBox.ComboBoxSource>
+                                <ListCollection:List x:TypeArguments="x:String">
+                                    <x:String>Each</x:String>
+                                    <x:String>Pallet</x:String>
+                                </ListCollection:List>
+                            </combobox:SfComboBox.ComboBoxSource>
+                        </combobox:SfComboBox>
+                    </inputLayout:SfTextInputLayout>
+
+                    <Grid Padding="15,0,15,0" ColumnDefinitions="1*,1*">
+                        <buttons:SfButton
+                            Grid.Column="0"
+                            BackgroundColor="{StaticResource Secondary}"
+                            Command="{Binding SearchLPCommand}"
+                            ImageAlignment="End"
+                            IsEnabled="{Binding IsNotBusy}"
+                            ShowIcon="True"
+                            Text="LOOKUP">
+                            <buttons:SfButton.Image>
+                                <Image>
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="{DynamicResource FontMaterialIconsOutlinedRegular}" Glyph="{StaticResource IconSearch}" />
+                                    </Image.Source>
+                                </Image>
+                            </buttons:SfButton.Image>
+                        </buttons:SfButton>
+                        <buttons:SfButton
+                            Grid.Column="1"
+                            BackgroundColor="{StaticResource Secondary}"
+                            Command="{Binding ScanLPCommand}"
+                            ImageAlignment="Right"
+                            IsEnabled="{Binding IsNotBusy}"
+                            ShowIcon="True"
+                            Text="SCAN">
+                            <buttons:SfButton.Image>
+                                <Image>
+                                    <Image.Source>
+                                        <FontImageSource FontFamily="{DynamicResource FontMaterialIconsOutlinedRegular}" Glyph="{StaticResource IconDocumentScanner}" />
+                                    </Image.Source>
+                                </Image>
+                            </buttons:SfButton.Image>
+                        </buttons:SfButton>
+                    </Grid>
+
+                    <StackLayout Padding="0,2,0,0" />
+
+                    <StackLayout>
+                        <StackLayout HeightRequest="{StaticResource SeparatorHeightRequest}">
+                            <BoxView Style="{StaticResource SeparatorBoxView}" />
+                        </StackLayout>
+                    </StackLayout>
+
+                    <StackLayout Padding="15,0,15,0">
+                        <Label FontSize="Medium" Text="Put Away" />
+                    </StackLayout>
+
+                    <controls:EntryWithSearchView
+                        Padding="15,0,15,-10"
+                        ErrorText="{Binding Zone.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                        HasError="{Binding Zone.IsValid, Converter={xct:InvertedBoolConverter}}"
+                        Hint="Area*"
+                        HorizontalOptions="StartAndExpand"
+                        SearchCommand="{Binding SearchZoneCommand}"
+                        Text="{Binding Zone.Value.Name, Mode=TwoWay}"
+                        UnfocusedCommand="{Binding ZoneUnfocusedCommand}" />
+                    <controls:EntryWithScanAndSearchView
+                        Padding="15,0,15,-10"
+                        ErrorText="{Binding Bin.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                        HasError="{Binding Bin.IsValid, Converter={xct:InvertedBoolConverter}}"
+                        Hint="Location*"
+                        ScanCommand="{Binding ScanBinCommand}"
+                        SearchCommand="{Binding SearchBinCommand}"
+                        Text="{Binding Bin.Value, Mode=TwoWay}"
+                        UnfocusedCommand="{Binding BinUnfocusedCommand}" />
+
+                    <StackLayout
+                        Padding="15,10,15,15"
+                        HorizontalOptions="EndAndExpand"
+                        Orientation="Horizontal">
+                        <buttons:SfButton
+                            Command="{Binding PutAwayCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            Text="PUT AWAY" />
+                    </StackLayout>
+                </StackLayout>
+
+                <listView:SfListView
+                    AutoFitMode="DynamicHeight"
+                    IsVisible="{Binding HasRecord}"
+                    ItemsSource="{Binding LPs}"
+                    SelectionBackgroundColor="Transparent">
+                    <listView:SfListView.HeaderTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <inputLayout:SfTextInputLayout
+                                    Padding="15,0,15,-10"
+                                    ContainerType="Outlined"
+                                    ErrorText="{Binding Type.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                                    HasError="{Binding Type.IsValid, Converter={xct:InvertedBoolConverter}}"
+                                    Hint="Type*"
+                                    HorizontalOptions="FillAndExpand">
+                                    <combobox:SfComboBox HeightRequest="52" SelectedItem="{Binding Type.Value}">
+                                        <combobox:SfComboBox.Behaviors>
+                                            <xct:EventToCommandBehavior Command="{Binding TypeChangedCommand}" EventName="SelectionChanged" />
+                                        </combobox:SfComboBox.Behaviors>
+                                        <combobox:SfComboBox.ComboBoxSource>
+                                            <ListCollection:List x:TypeArguments="x:String">
+                                                <x:String>Each</x:String>
+                                                <x:String>Pallet</x:String>
+                                            </ListCollection:List>
+                                        </combobox:SfComboBox.ComboBoxSource>
+                                    </combobox:SfComboBox>
+                                </inputLayout:SfTextInputLayout>
+
+                                <Grid Padding="15,0,15,0" ColumnDefinitions="1*,1*">
+                                    <buttons:SfButton
+                                        Grid.Column="0"
+                                        BackgroundColor="{StaticResource Secondary}"
+                                        Command="{Binding SearchLPCommand}"
+                                        ImageAlignment="End"
+                                        IsEnabled="{Binding IsNotBusy}"
+                                        ShowIcon="True"
+                                        Text="LOOKUP">
+                                        <buttons:SfButton.Image>
+                                            <Image>
+                                                <Image.Source>
+                                                    <FontImageSource FontFamily="{DynamicResource FontMaterialIconsOutlinedRegular}" Glyph="{StaticResource IconSearch}" />
+                                                </Image.Source>
+                                            </Image>
+                                        </buttons:SfButton.Image>
+                                    </buttons:SfButton>
+                                    <buttons:SfButton
+                                        Grid.Column="1"
+                                        BackgroundColor="{StaticResource Secondary}"
+                                        Command="{Binding ScanLPCommand}"
+                                        ImageAlignment="Right"
+                                        IsEnabled="{Binding IsNotBusy}"
+                                        ShowIcon="True"
+                                        Text="SCAN">
+                                        <buttons:SfButton.Image>
+                                            <Image>
+                                                <Image.Source>
+                                                    <FontImageSource FontFamily="{DynamicResource FontMaterialIconsOutlinedRegular}" Glyph="{StaticResource IconDocumentScanner}" />
+                                                </Image.Source>
+                                            </Image>
+                                        </buttons:SfButton.Image>
+                                    </buttons:SfButton>
+                                </Grid>
+                            </StackLayout>
+                        </DataTemplate>
+                    </listView:SfListView.HeaderTemplate>
+                    <listView:SfListView.ItemTemplate>
+                        <DataTemplate x:DataType="model:PutAwayLicensePlateViewModel">
+                            <StackLayout>
+                                <StackLayout Padding="15,10,15,0" Orientation="Horizontal">
+                                    <Label
+                                        FontAttributes="Bold"
+                                        FontSize="Medium"
+                                        HorizontalOptions="StartAndExpand"
+                                        Text="{Binding LicensePlateNo, StringFormat='LP {0}'}" />
+
+                                    <buttons:SfButton
+                                        BackgroundColor="Transparent"
+                                        Command="{Binding Source={x:Reference PutAwayViewPage}, Path=BindingContext.DeleteLPCommand}"
+                                        CommandParameter="{Binding .}"
+                                        HeightRequest="25"
+                                        HorizontalOptions="End"
+                                        ShowIcon="True"
+                                        Style="{StaticResource NoStyle}">
+                                        <buttons:SfButton.Image>
+                                            <Image>
+                                                <Image.Source>
+                                                    <FontImageSource
+                                                        FontFamily="{DynamicResource FontMaterialIconsOutlinedRegular}"
+                                                        Glyph="{StaticResource IconDoNotDisturbOn}"
+                                                        Color="{StaticResource Primary}" />
+                                                </Image.Source>
+                                            </Image>
+                                        </buttons:SfButton.Image>
+                                    </buttons:SfButton>
+                                </StackLayout>
+
+                                <StackLayout Padding="15,10,15,0">
+                                    <listView:SfListView
+                                        AutoFitMode="DynamicHeight"
+                                        IsScrollBarVisible="False"
+                                        IsScrollingEnabled="False"
+                                        ItemSpacing="0,0,0,15"
+                                        ItemsSource="{Binding Items}"
+                                        SelectionBackgroundColor="Transparent">
+                                        <listView:SfListView.ItemTemplate>
+                                            <DataTemplate x:DataType="model:PutAwayLicensePlateItemViewModel">
+                                                <Grid ColumnDefinitions="*, Auto">
+                                                    <StackLayout Grid.Column="0">
+                                                        <Label Text="{Binding SKU, StringFormat='SKU {0}'}" />
+                                                        <Label Text="{Binding Description}" />
+                                                    </StackLayout>
+                                                    <StackLayout Grid.Column="1" VerticalOptions="Center">
+                                                        <Label Text="{Binding TotalQty, StringFormat='{0} units'}" />
+                                                    </StackLayout>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </listView:SfListView.ItemTemplate>
+                                    </listView:SfListView>
+                                </StackLayout>
+
+                                <StackLayout HeightRequest="{StaticResource SeparatorHeightRequest}" IsVisible="{Binding ShowSeparator}">
+                                    <BoxView Style="{StaticResource SeparatorBoxView}" />
+                                </StackLayout>
+                            </StackLayout>
+                        </DataTemplate>
+                    </listView:SfListView.ItemTemplate>
+                    <listView:SfListView.FooterTemplate>
+                        <DataTemplate>
+                            <StackLayout>
+                                <StackLayout>
+                                    <StackLayout HeightRequest="{StaticResource SeparatorHeightRequest}">
+                                        <BoxView Style="{StaticResource SeparatorBoxView}" />
+                                    </StackLayout>
+                                </StackLayout>
+
+                                <StackLayout Padding="15,0,15,0">
+                                    <Label FontSize="Medium" Text="Put Away" />
+                                </StackLayout>
+
+                                <controls:EntryWithSearchView
+                                    Padding="15,0,15,-10"
+                                    ErrorText="{Binding Zone.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                                    HasError="{Binding Zone.IsValid, Converter={xct:InvertedBoolConverter}}"
+                                    Hint="Area*"
+                                    HorizontalOptions="StartAndExpand"
+                                    SearchCommand="{Binding SearchZoneCommand}"
+                                    Text="{Binding Zone.Value.Name, Mode=TwoWay}"
+                                    UnfocusedCommand="{Binding ZoneUnfocusedCommand}" />
+                                <controls:EntryWithScanAndSearchView
+                                    Padding="15,0,15,-10"
+                                    ErrorText="{Binding Bin.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                                    HasError="{Binding Bin.IsValid, Converter={xct:InvertedBoolConverter}}"
+                                    Hint="Location*"
+                                    ScanCommand="{Binding ScanBinCommand}"
+                                    SearchCommand="{Binding SearchBinCommand}"
+                                    Text="{Binding Bin.Value, Mode=TwoWay}"
+                                    UnfocusedCommand="{Binding BinUnfocusedCommand}" />
+
+                                <StackLayout
+                                    Padding="15,10,15,15"
+                                    HorizontalOptions="EndAndExpand"
+                                    Orientation="Horizontal">
+                                    <buttons:SfButton
+                                        Command="{Binding PutAwayCommand}"
+                                        IsEnabled="{Binding IsNotBusy}"
+                                        Text="PUT AWAY" />
+                                </StackLayout>
+                            </StackLayout>
+                        </DataTemplate>
+                    </listView:SfListView.FooterTemplate>
+                </listView:SfListView>
+            </StackLayout>
+
+            <controls:ActivityIndicatorView Grid.Row="0" ActivityIndicatorViewModel="{Binding ActivityIndicatorViewModel}" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

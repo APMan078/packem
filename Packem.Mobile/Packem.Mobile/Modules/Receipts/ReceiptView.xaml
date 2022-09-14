@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.Receipts.ReceiptView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:converters="clr-namespace:Packem.Mobile.Common.Converters"
+    xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+    xmlns:numericBox="clr-namespace:Syncfusion.SfNumericTextBox.XForms;assembly=Syncfusion.SfNumericTextBox.XForms"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Receipts"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    Title="Receipt"
+    x:DataType="vm:ReceiptViewModel"
+    Shell.TitleColor="{StaticResource Primary}">
+    <ContentPage.Resources>
+        <converters:FirstValidationErrorConverter x:Key="FirstValidationErrorConverter" />
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding ClearCommand}"
+            IsEnabled="{Binding IsNotBusy}"
+            Order="Primary"
+            Text="Clear" />
+    </ContentPage.ToolbarItems>
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <Grid xct:StateLayout.AnimateStateChanges="False" xct:StateLayout.CurrentState="{Binding CurrentState}">
+            <xct:StateLayout.StateViews>
+                <xct:StateView StateKey="Loading" VerticalOptions="FillAndExpand">
+                    <controls:ActivityIndicatorView ActivityIndicatorViewModel="{Binding ActivityIndicatorViewModel}" />
+                </xct:StateView>
+                <xct:StateView StateKey="Success">
+                    <ScrollView>
+                        <StackLayout>
+                            <controls:EntryWithScanAndSearchView
+                                Padding="15,0,15,-10"
+                                ErrorText="{Binding Item.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                                HasError="{Binding Item.IsValid, Converter={xct:InvertedBoolConverter}}"
+                                Hint="Item Lookup*"
+                                ScanCommand="{Binding ScanItemCommand}"
+                                SearchCommand="{Binding SearchItemCommand}"
+                                Text="{Binding Item.Value.SKU, Mode=TwoWay}"
+                                UnfocusedCommand="{Binding ItemUnfocusedCommand}" />
+                            <inputLayout:SfTextInputLayout
+                                Padding="15,0,15,-10"
+                                ContainerType="Outlined"
+                                Hint="Description">
+                                <Entry IsEnabled="False" Text="{Binding Item.Value.Description}" />
+                            </inputLayout:SfTextInputLayout>
+                            <inputLayout:SfTextInputLayout
+                                Padding="15,0,15,-10"
+                                ContainerType="Outlined"
+                                Hint="UOM">
+                                <Entry IsEnabled="False" Text="{Binding Item.Value.UOM}" />
+                            </inputLayout:SfTextInputLayout>
+
+                            <StackLayout>
+                                <StackLayout HeightRequest="{StaticResource SeparatorHeightRequest}">
+                                    <BoxView Style="{StaticResource SeparatorBoxView}" />
+                                </StackLayout>
+                            </StackLayout>
+
+                            <StackLayout Padding="15,0,15,0" Orientation="Horizontal">
+                                <Label
+                                    FontSize="Medium"
+                                    HorizontalOptions="FillAndExpand"
+                                    Text="Lot" />
+                                <Label
+                                    FontSize="Subtitle"
+                                    HorizontalOptions="End"
+                                    IsEnabled="{Binding IsNotBusy}"
+                                    Style="{StaticResource LinkLabel}"
+                                    Text="ADD">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding AddLotCommand}" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                            </StackLayout>
+
+                            <controls:EntryWithSearchView
+                                Padding="15,0,15,-10"
+                                Hint="Lot No"
+                                HorizontalOptions="StartAndExpand"
+                                SearchCommand="{Binding SearchLotCommand}"
+                                Text="{Binding Lot.LotNo, Mode=TwoWay}" />
+
+                            <inputLayout:SfTextInputLayout
+                                Padding="15,0,15,-10"
+                                ContainerType="Outlined"
+                                Hint="Expiration Date">
+                                <Entry IsEnabled="False" Text="{Binding Lot.ExpirationDate, Mode=TwoWay, StringFormat='{0:MM/dd/yyyy}'}" />
+                            </inputLayout:SfTextInputLayout>
+
+                            <StackLayout>
+                                <StackLayout HeightRequest="{StaticResource SeparatorHeightRequest}">
+                                    <BoxView Style="{StaticResource SeparatorBoxView}" />
+                                </StackLayout>
+                            </StackLayout>
+
+                            <inputLayout:SfTextInputLayout
+                                Padding="15,0,15,-10"
+                                ContainerType="Outlined"
+                                ErrorText="{Binding QtyReceived.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                                HasError="{Binding QtyReceived.IsValid, Converter={xct:InvertedBoolConverter}}"
+                                Hint="Qty Received*">
+                                <numericBox:SfNumericTextBox
+                                    AllowDefaultDecimalDigits="False"
+                                    AllowNull="True"
+                                    Value="{Binding QtyReceived.Value}">
+                                    <numericBox:SfNumericTextBox.Behaviors>
+                                        <xct:EventToCommandBehavior Command="{Binding QtyReceivedUnfocusedCommand}" EventName="Unfocused" />
+                                    </numericBox:SfNumericTextBox.Behaviors>
+                                </numericBox:SfNumericTextBox>
+                            </inputLayout:SfTextInputLayout>
+
+                            <StackLayout
+                                Padding="15,0,15,15"
+                                HorizontalOptions="EndAndExpand"
+                                Orientation="Horizontal">
+                                <buttons:SfButton
+                                    Command="{Binding PrintCommand}"
+                                    IsEnabled="{Binding IsNotBusy}"
+                                    Text="PRINT"
+                                    WidthRequest="80" />
+                                <buttons:SfButton
+                                    Command="{Binding QueuePACommand}"
+                                    IsEnabled="{Binding IsNotBusy}"
+                                    Text="QUEUE PA" />
+                            </StackLayout>
+                        </StackLayout>
+                    </ScrollView>
+                </xct:StateView>
+            </xct:StateLayout.StateViews>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

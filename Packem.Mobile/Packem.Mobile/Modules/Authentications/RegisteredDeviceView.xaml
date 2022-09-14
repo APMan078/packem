@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.Authentications.RegisteredDeviceView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:me="clr-namespace:Packem.Mobile.Common.MarkupExtensions"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Authentications"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:DataType="vm:RegisteredDeviceViewModel"
+    Shell.FlyoutItemIsVisible="False"
+    Shell.NavBarIsVisible="False">
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <Grid>
+            <Grid Padding="18" RowDefinitions="1.4*, 8.6*">
+                <StackLayout
+                    Padding="0,20,0,0"
+                    HorizontalOptions="StartAndExpand"
+                    Orientation="Horizontal"
+                    VerticalOptions="StartAndExpand">
+                    <Image HeightRequest="40" Source="{me:EmbeddedImage Packem.Mobile.Resources.Images.packem_logo_red_secondary.png}" />
+                    <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="Large"
+                            Text="PACKEM" />
+                        <Label
+                            Margin="-5,0,0,0"
+                            FontSize="Large"
+                            Text="WMS" />
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Grid.Row="1">
+                    <Label
+                        Padding="0,0,0,20"
+                        FontAttributes="Bold"
+                        FontSize="Title"
+                        Text="Device Registered" />
+
+                    <StackLayout Padding="0,0,0,30">
+                        <Label FontSize="Medium" Text="This device has been register to:" />
+                        <Label
+                            Margin="0,-4,0,0"
+                            FontSize="Medium"
+                            Text="{Binding ClientName}" />
+                        <Label
+                            Margin="0,-4,0,0"
+                            FontSize="Medium"
+                            Text="access login using their username and" />
+                        <Label
+                            Margin="0,-4,0,0"
+                            FontSize="Medium"
+                            Text="password" />
+                    </StackLayout>
+
+                    <Label
+                        Padding="10,0,0,0"
+                        IsEnabled="{Binding IsNotBusy}"
+                        Style="{StaticResource LinkLabel}"
+                        Text="LOGIN">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding LoginCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+
+                    <Label
+                        Padding="10,0,0,0"
+                        IsEnabled="{Binding IsNotBusy}"
+                        Style="{StaticResource LinkLabel}"
+                        Text="UNREGISTER DEVICE">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding UnregisterDeviceCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
+            </Grid>
+
+            <controls:ActivityIndicatorView Grid.Row="0" ActivityIndicatorViewModel="{Binding ActivityIndicatorViewModel}" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

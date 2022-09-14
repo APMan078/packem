@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application
+    x:Class="Packem.Mobile.App"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:dataGrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
+    xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms">
+    <!--
+        Define global resources and styles here, that apply to all pages in your app.
+    -->
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <Color x:Key="Primary">#DE4A50</Color>
+            <Color x:Key="PrimaryVariant">#D5D5D5</Color>
+            <Color x:Key="Secondary">#0087DB</Color>
+            <Color x:Key="SecondaryVariant">#6d6d6d</Color>
+
+            <Color x:Key="Background">#F5F5F5</Color>
+            <Color x:Key="Surface">#ffffff</Color>
+            <Color x:Key="Error">#b00020</Color>
+
+            <Color x:Key="OnPrimary">#ffffff</Color>
+            <Color x:Key="OnSecondary">#17262F</Color>
+            <Color x:Key="OnBackground">#000000</Color>
+            <Color x:Key="OnSurface">#000000</Color>
+            <Color x:Key="OnError">#ffffff</Color>
+
+
+            <!--  Icon Font  -->
+            <x:String x:Key="FontMaterialIconsRegular">MaterialIcons-Regular</x:String>
+            <x:String x:Key="FontMaterialIconsOutlinedRegular">MaterialIconsOutlined-Regular</x:String>
+
+            <!--  Icons used by the app  -->
+            <!--  https://fonts.google.com/icons?icon.style=Outlined  -->
+            <x:String x:Key="IconSettings">&#xe8b8;</x:String>
+            <x:String x:Key="IconSearch">&#xe8b6;</x:String>
+            <x:String x:Key="IconDocumentScanner">&#xe5fa;</x:String>
+            <x:String x:Key="IconInventory2">&#xe1a1;</x:String>
+            <x:String x:Key="IconLocalShipping">&#xe558;</x:String>
+            <x:String x:Key="IconReceiptLong">&#xef6e;</x:String>
+            <x:String x:Key="IconOutput">&#xebbe;</x:String>
+            <x:String x:Key="IconInput">&#xe890;</x:String>
+            <x:String x:Key="IconMoveDown">&#xeb61;</x:String>
+            <x:String x:Key="IconDoNotDisturbOn">&#xe644;</x:String>
+
+            <Style TargetType="buttons:SfButton">
+                <Setter Property="TextColor" Value="{StaticResource OnPrimary}" />
+                <Setter Property="CornerRadius" Value="3" />
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="HeightRequest" Value="52" />
+                <Setter Property="BackgroundColor" Value="{StaticResource Secondary}" />
+
+                <!--<Setter Property="VisualStateManager.VisualStateGroups">
+                    <VisualStateGroupList>
+                        <VisualStateGroup x:Name="CommonStates">
+                            <VisualState x:Name="Normal">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Secondary}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                            <VisualState x:Name="Disabled">
+                                <VisualState.Setters>
+                                    <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                </VisualState.Setters>
+                            </VisualState>
+                        </VisualStateGroup>
+                    </VisualStateGroupList>
+                </Setter>-->
+            </Style>
+
+            <Style x:Key="NoStyle" TargetType="buttons:SfButton">
+                <Setter Property="CornerRadius" Value="0" />
+                <Setter Property="Padding" Value="0" />
+                <Setter Property="BackgroundColor" Value="{StaticResource Secondary}" />
+            </Style>
+
+            <Style TargetType="Label">
+                <Setter Property="TextColor" Value="Black" />
+            </Style>
+
+            <Style x:Key="LinkLabel" TargetType="Label">
+                <Setter Property="FontSize" Value="Subtitle" />
+                <Setter Property="TextColor" Value="{StaticResource Secondary}" />
+            </Style>
+
+            <Style TargetType="inputLayout:SfTextInputLayout">
+                <Setter Property="FocusedColor" Value="{StaticResource Secondary}" />
+                <Setter Property="UnfocusedColor" Value="{StaticResource SecondaryVariant}" />
+            </Style>
+
+            <Style x:Key="SfDataGridStyle" TargetType="dataGrid:SfDataGrid">
+                <Setter Property="AllowSorting" Value="True" />
+                <Setter Property="AutoGenerateColumns" Value="False" />
+                <Setter Property="ColumnSizer" Value="Star" />
+                <Setter Property="SelectionMode" Value="Single" />
+            </Style>
+            <x:Single x:Key="SfDataGridGridCellBorderWidth">2</x:Single>
+            <dataGrid:GridLinesVisibility x:Key="SfDataGridGridLinesVisibility">Horizontal</dataGrid:GridLinesVisibility>
+            <Color x:Key="SfDataGridHeaderBackgroundColor">#EFF2F7</Color>
+            <Color x:Key="SfDataGridHeaderForegroundColor">Black</Color>
+
+            <Style x:Key="SeparatorBoxView" TargetType="BoxView">
+                <Setter Property="Color" Value="{StaticResource PrimaryVariant}" />
+                <Setter Property="HeightRequest" Value="1" />
+                <Setter Property="VerticalOptions" Value="FillAndExpand" />
+            </Style>
+            <x:Double x:Key="SeparatorHeightRequest">1</x:Double>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

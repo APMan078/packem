@@ -1,0 +1,162 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.Picking.PickQueueItemLookupView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:converters="clr-namespace:Packem.Mobile.Common.Converters"
+    xmlns:core="clr-namespace:Packem.Mobile.ViewModels.Core"
+    xmlns:dataGrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
+    xmlns:listView="clr-namespace:Syncfusion.ListView.XForms;assembly=Syncfusion.SfListView.XForms"
+    xmlns:model="clr-namespace:Packem.Mobile.ViewModels.Picking"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Picking"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    Title="{Binding Title}"
+    x:DataType="vm:PickQueueItemLookupViewModel"
+    Shell.TitleColor="{StaticResource Primary}">
+    <ContentPage.Resources>
+        <converters:CompletedToColorConverter x:Key="CompletedToColorConverter" />
+    </ContentPage.Resources>
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <Grid>
+            <ScrollView>
+                <Grid RowDefinitions="Auto,*, Auto">
+                    <controls:EntryWithScanView
+                        Grid.Row="0"
+                        Padding="15,15,15,0"
+                        Hint="Item Lookup"
+                        HorizontalOptions="StartAndExpand"
+                        ScanCommand="{Binding ScanCommand}"
+                        UserStoppedTypingCommand="{Binding SearchCommand}" />
+                    <StackLayout Grid.Row="1" IsVisible="{Binding HasRecord, Converter={xct:InvertedBoolConverter}}">
+                        <controls:LabelForNoRecordFound Padding="0,55,0,0" Text="NO RECORD FOUND" />
+                    </StackLayout>
+                    <dataGrid:SfDataGrid
+                        Grid.Row="1"
+                        Padding="0,0,0,10"
+                        AllowSorting="False"
+                        IsVisible="{Binding HasRecord}"
+                        ItemsSource="{Binding OrderLines}"
+                        RowHeight="80"
+                        Style="{StaticResource SfDataGridStyle}">
+                        <dataGrid:SfDataGrid.Behaviors>
+                            <xct:EventToCommandBehavior Command="{Binding GridTapCommand}" EventName="SelectionChanged" />
+                        </dataGrid:SfDataGrid.Behaviors>
+                        <dataGrid:SfDataGrid.GridStyle>
+                            <dataGrid:DefaultStyle
+                                GridCellBorderWidth="{StaticResource SfDataGridGridCellBorderWidth}"
+                                GridLinesVisibility="{StaticResource SfDataGridGridLinesVisibility}"
+                                HeaderBackgroundColor="{StaticResource SfDataGridHeaderBackgroundColor}"
+                                HeaderForegroundColor="{StaticResource SfDataGridHeaderForegroundColor}" />
+                        </dataGrid:SfDataGrid.GridStyle>
+                        <dataGrid:SfDataGrid.Columns x:TypeArguments="dataGrid:Columns">
+                            <dataGrid:GridTemplateColumn
+                                HeaderText="  Item"
+                                HeaderTextAlignment="Start"
+                                MappingName=".">
+                                <dataGrid:GridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:DataType="model:OrderLinePickLookupViewModel">
+                                        <StackLayout Padding="5" HorizontalOptions="FillAndExpand">
+                                            <Label Text="{Binding ItemSKU}" />
+                                            <Label LineBreakMode="TailTruncation" Text="{Binding ItemDescription}" />
+                                            <StackLayout Orientation="Horizontal">
+                                                <Label FontAttributes="Bold" Text="UoM:" />
+                                                <Label Text="{Binding ItemUOM}" />
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </dataGrid:GridTemplateColumn.CellTemplate>
+                            </dataGrid:GridTemplateColumn>
+                            <dataGrid:GridTemplateColumn
+                                HeaderText="Qty"
+                                HeaderTextAlignment="End"
+                                MappingName="."
+                                TextAlignment="End">
+                                <dataGrid:GridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:DataType="model:OrderLinePickLookupViewModel">
+                                        <StackLayout Padding="5" HorizontalOptions="FillAndExpand">
+                                            <StackLayout HorizontalOptions="End" Orientation="Horizontal">
+                                                <Label
+                                                    Text="{Binding Received}"
+                                                    TextColor="{Binding Completed, Converter={StaticResource CompletedToColorConverter}}"
+                                                    XAlign="Center"
+                                                    YAlign="Center" />
+                                                <Label
+                                                    Text="/"
+                                                    TextColor="{Binding Completed, Converter={StaticResource CompletedToColorConverter}}"
+                                                    XAlign="Center"
+                                                    YAlign="Center" />
+                                                <Label
+                                                    Text="{Binding Qty}"
+                                                    TextColor="{Binding Completed, Converter={StaticResource CompletedToColorConverter}}"
+                                                    XAlign="Center"
+                                                    YAlign="Center" />
+                                            </StackLayout>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </dataGrid:GridTemplateColumn.CellTemplate>
+                            </dataGrid:GridTemplateColumn>
+                            <dataGrid:GridTemplateColumn
+                                HeaderText="Location(s)"
+                                HeaderTextAlignment="End"
+                                MappingName=".">
+                                <dataGrid:GridTemplateColumn.CellTemplate>
+                                    <DataTemplate x:DataType="model:OrderLinePickLookupViewModel">
+                                        <StackLayout Padding="5" HorizontalOptions="End">
+                                            <listView:SfListView
+                                                Padding="5"
+                                                AutoFitMode="Height"
+                                                IsEnabled="False"
+                                                ItemsSource="{Binding Bins}">
+                                                <listView:SfListView.ItemTemplate>
+                                                    <DataTemplate x:DataType="core:BinViewModel">
+                                                        <StackLayout HorizontalOptions="End">
+                                                            <Label
+                                                                Text="{Binding Name}"
+                                                                XAlign="Center"
+                                                                YAlign="Center" />
+                                                        </StackLayout>
+                                                    </DataTemplate>
+                                                </listView:SfListView.ItemTemplate>
+                                            </listView:SfListView>
+                                        </StackLayout>
+                                    </DataTemplate>
+                                </dataGrid:GridTemplateColumn.CellTemplate>
+                            </dataGrid:GridTemplateColumn>
+                        </dataGrid:SfDataGrid.Columns>
+                    </dataGrid:SfDataGrid>
+
+                    <StackLayout
+                        Grid.Row="2"
+                        Padding="15,0,15,15"
+                        HorizontalOptions="EndAndExpand"
+                        Orientation="Horizontal">
+                        <buttons:SfButton
+                            Command="{Binding StartCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            IsVisible="{Binding StartVisible}"
+                            Text="START"
+                            WidthRequest="80" />
+                        <buttons:SfButton
+                            Command="{Binding PauseCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            IsVisible="{Binding PauseVisible}"
+                            Text="PAUSE"
+                            WidthRequest="80" />
+                        <buttons:SfButton
+                            Command="{Binding CompleteCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            IsVisible="{Binding CompleteVisible}"
+                            Text="COMPLETE PICK" />
+                    </StackLayout>
+                </Grid>
+            </ScrollView>
+
+            <controls:ActivityIndicatorView Grid.Row="0" ActivityIndicatorViewModel="{Binding ActivityIndicatorViewModel}" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

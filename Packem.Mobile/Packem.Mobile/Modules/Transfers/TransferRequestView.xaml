@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.Transfers.TransferRequestView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:converters="clr-namespace:Packem.Mobile.Common.Converters"
+    xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+    xmlns:numericBox="clr-namespace:Syncfusion.SfNumericTextBox.XForms;assembly=Syncfusion.SfNumericTextBox.XForms"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Transfers"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    Title="Transfer Request"
+    x:DataType="vm:TransferRequestViewModel"
+    Shell.TitleColor="{StaticResource Primary}">
+    <ContentPage.Resources>
+        <converters:FirstValidationErrorConverter x:Key="FirstValidationErrorConverter" />
+    </ContentPage.Resources>
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <Grid>
+            <ScrollView>
+                <StackLayout>
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        Hint="SKU"
+                        HorizontalOptions="StartAndExpand">
+                        <Entry IsEnabled="False" Text="{Binding Transfer.ItemSKU}" />
+                    </inputLayout:SfTextInputLayout>
+
+                    <StackLayout Padding="15,0,15,-10" Orientation="Horizontal">
+                        <inputLayout:SfTextInputLayout
+                            ContainerType="Outlined"
+                            Hint="Description"
+                            HorizontalOptions="FillAndExpand">
+                            <Entry IsEnabled="False" Text="{Binding Transfer.ItemDescription}" />
+                        </inputLayout:SfTextInputLayout>
+                        <inputLayout:SfTextInputLayout
+                            ContainerType="Outlined"
+                            Hint="UOM"
+                            HorizontalOptions="End">
+                            <Entry IsEnabled="False" Text="{Binding Transfer.ItemUOM}" />
+                        </inputLayout:SfTextInputLayout>
+                    </StackLayout>
+
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        Hint="Qty to Transfer"
+                        HorizontalOptions="StartAndExpand">
+                        <Entry IsEnabled="False" Text="{Binding Transfer.Remaining}" />
+                    </inputLayout:SfTextInputLayout>
+
+                    <StackLayout>
+                        <StackLayout HeightRequest="{StaticResource SeparatorHeightRequest}">
+                            <BoxView Style="{StaticResource SeparatorBoxView}" />
+                        </StackLayout>
+                    </StackLayout>
+
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        Hint="Area"
+                        HorizontalOptions="StartAndExpand">
+                        <Entry IsEnabled="False" Text="{Binding Transfer.CurrentZone}" />
+                    </inputLayout:SfTextInputLayout>
+
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        Hint="Location"
+                        HorizontalOptions="StartAndExpand">
+                        <Entry IsEnabled="False" Text="{Binding Transfer.CurrentBin}" />
+                    </inputLayout:SfTextInputLayout>
+
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        Hint="Qty at Location">
+                        <numericBox:SfNumericTextBox
+                            AllowDefaultDecimalDigits="False"
+                            AllowNull="True"
+                            IsEnabled="False"
+                            Value="{Binding Transfer.CurrentBinQty}" />
+                    </inputLayout:SfTextInputLayout>
+
+                    <Grid Padding="15,0,15,-10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="50*" />
+                        </Grid.ColumnDefinitions>
+                        <inputLayout:SfTextInputLayout
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            ContainerType="Outlined"
+                            Hint="Lot No"
+                            HorizontalOptions="FillAndExpand">
+                            <Entry IsEnabled="False" Text="{Binding Transfer.LotNo}" />
+                        </inputLayout:SfTextInputLayout>
+                        <inputLayout:SfTextInputLayout
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            ContainerType="Outlined"
+                            Hint="Exp Date"
+                            HorizontalOptions="FillAndExpand">
+                            <Entry IsEnabled="False" Text="{Binding Transfer.ExpirationDate, StringFormat='{0:MM/dd/yyyy}'}" />
+                        </inputLayout:SfTextInputLayout>
+                    </Grid>
+
+                    <StackLayout>
+                        <StackLayout HeightRequest="{StaticResource SeparatorHeightRequest}">
+                            <BoxView Style="{StaticResource SeparatorBoxView}" />
+                        </StackLayout>
+                    </StackLayout>
+
+                    <StackLayout Padding="15,0,15,0">
+                        <Label FontSize="Medium" Text="To" />
+                    </StackLayout>
+
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        Hint="Area"
+                        HorizontalOptions="StartAndExpand"
+                        IsVisible="{Binding ZoneToEdit, Converter={xct:InvertedBoolConverter}}">
+                        <Entry IsEnabled="False" Text="{Binding Transfer.NewZone}" />
+                    </inputLayout:SfTextInputLayout>
+                    <controls:EntryWithSearchView
+                        Padding="15,0,15,-10"
+                        ErrorText="{Binding ZoneTo.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                        HasError="{Binding ZoneTo.IsValid, Converter={xct:InvertedBoolConverter}}"
+                        Hint="Area*"
+                        HorizontalOptions="StartAndExpand"
+                        IsVisible="{Binding ZoneToEdit}"
+                        SearchCommand="{Binding SearchZoneToCommand}"
+                        Text="{Binding ZoneTo.Value.Name, Mode=TwoWay}"
+                        UnfocusedCommand="{Binding ZoneToUnfocusedCommand}" />
+
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        Hint="Location"
+                        HorizontalOptions="StartAndExpand"
+                        IsVisible="{Binding BinToEdit, Converter={xct:InvertedBoolConverter}}">
+                        <Entry IsEnabled="False" Text="{Binding Transfer.NewBin}" />
+                    </inputLayout:SfTextInputLayout>
+                    <controls:EntryWithScanAndSearchView
+                        Padding="15,0,15,0"
+                        ErrorText="{Binding BinTo.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                        HasError="{Binding BinTo.IsValid, Converter={xct:InvertedBoolConverter}}"
+                        Hint="Location*"
+                        HorizontalOptions="StartAndExpand"
+                        IsVisible="{Binding BinToEdit}"
+                        ScanCommand="{Binding ScanBinToCommand}"
+                        SearchCommand="{Binding SearchBinToCommand}"
+                        Text="{Binding BinTo.Value, Mode=TwoWay}"
+                        UnfocusedCommand="{Binding BinToUnfocusedCommand}" />
+
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        Hint="Qty at Location">
+                        <numericBox:SfNumericTextBox
+                            AllowDefaultDecimalDigits="False"
+                            AllowNull="True"
+                            IsEnabled="False"
+                            Value="{Binding BinToProp.Qty}" />
+                    </inputLayout:SfTextInputLayout>
+
+                    <Grid Padding="15,0,15,-10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50*" />
+                            <ColumnDefinition Width="50*" />
+                        </Grid.ColumnDefinitions>
+                        <inputLayout:SfTextInputLayout
+                            Grid.Row="0"
+                            Grid.Column="0"
+                            ContainerType="Outlined"
+                            Hint="Lot No"
+                            HorizontalOptions="FillAndExpand">
+                            <Entry IsEnabled="False" Text="{Binding BinToProp.LotNo}" />
+                        </inputLayout:SfTextInputLayout>
+                        <inputLayout:SfTextInputLayout
+                            Grid.Row="0"
+                            Grid.Column="1"
+                            ContainerType="Outlined"
+                            Hint="Exp Date"
+                            HorizontalOptions="FillAndExpand">
+                            <Entry IsEnabled="False" Text="{Binding BinToProp.ExpirationDate, StringFormat='{0:MM/dd/yyyy}'}" />
+                        </inputLayout:SfTextInputLayout>
+                    </Grid>
+
+                    <StackLayout>
+                        <StackLayout HeightRequest="{StaticResource SeparatorHeightRequest}">
+                            <BoxView Style="{StaticResource SeparatorBoxView}" />
+                        </StackLayout>
+                    </StackLayout>
+
+                    <inputLayout:SfTextInputLayout
+                        Padding="15,0,15,-10"
+                        ContainerType="Outlined"
+                        ErrorText="{Binding QtyTransfered.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                        HasError="{Binding QtyTransfered.IsValid, Converter={xct:InvertedBoolConverter}}"
+                        Hint="Qty Transfered*">
+                        <numericBox:SfNumericTextBox
+                            AllowDefaultDecimalDigits="False"
+                            AllowNull="True"
+                            Value="{Binding QtyTransfered.Value}">
+                            <numericBox:SfNumericTextBox.Behaviors>
+                                <xct:EventToCommandBehavior Command="{Binding QtyTransferedUnfocusedCommand}" EventName="Unfocused" />
+                            </numericBox:SfNumericTextBox.Behaviors>
+                        </numericBox:SfNumericTextBox>
+                    </inputLayout:SfTextInputLayout>
+
+                    <StackLayout
+                        Padding="15,10,15,15"
+                        HorizontalOptions="EndAndExpand"
+                        Orientation="Horizontal">
+                        <buttons:SfButton
+                            Command="{Binding CompleteCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            Text="COMPLETE" />
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+
+            <controls:ActivityIndicatorView Grid.Row="0" ActivityIndicatorViewModel="{Binding ActivityIndicatorViewModel}" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

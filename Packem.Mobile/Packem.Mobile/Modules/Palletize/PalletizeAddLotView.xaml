@@ -1,0 +1,88 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.Palletize.PalletizeAddLotView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:converters="clr-namespace:Packem.Mobile.Common.Converters"
+    xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+    xmlns:picker="clr-namespace:Syncfusion.XForms.Pickers;assembly=Syncfusion.SfPicker.XForms"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Palletize"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    Title="Add Lot"
+    x:DataType="vm:PalletizeAddLotViewModel"
+    Shell.TitleColor="{StaticResource Primary}">
+    <ContentPage.Resources>
+        <converters:FirstValidationErrorConverter x:Key="FirstValidationErrorConverter" />
+    </ContentPage.Resources>
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <Grid>
+            <ScrollView>
+                <StackLayout>
+                    <StackLayout VerticalOptions="StartAndExpand">
+                        <inputLayout:SfTextInputLayout
+                            Padding="15,0,15,-10"
+                            ContainerType="Outlined"
+                            ErrorText="{Binding LotNo.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                            HasError="{Binding LotNo.IsValid, Converter={xct:InvertedBoolConverter}}"
+                            Hint="Lot No*">
+                            <Entry Text="{Binding LotNo.Value}">
+                                <Entry.Behaviors>
+                                    <xct:EventToCommandBehavior Command="{Binding LotNoUnfocusedCommand}" EventName="Unfocused" />
+                                </Entry.Behaviors>
+                            </Entry>
+                        </inputLayout:SfTextInputLayout>
+
+                        <controls:EntryWithSearchView
+                            Padding="15,0,15,-10"
+                            ErrorText="{Binding ExpirationDate.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                            HasError="{Binding ExpirationDate.IsValid, Converter={xct:InvertedBoolConverter}}"
+                            Hint="Expiration Date*"
+                            HorizontalOptions="StartAndExpand"
+                            SearchCommand="{Binding SearchExpirationDateCommand}"
+                            Text="{Binding ExpirationDate.Value, Mode=TwoWay}"
+                            UnfocusedCommand="{Binding ExpirationDateUnfocusedCommand}" />
+
+                        <picker:SfDatePicker
+                            CancelButtonBackgroundColor="{StaticResource OnPrimary}"
+                            CancelButtonTextColor="{StaticResource Secondary}"
+                            HeaderBackgroundColor="{StaticResource Secondary}"
+                            HeaderText="Expiration Date"
+                            HeaderTextColor="{StaticResource OnPrimary}"
+                            IsOpen="{Binding PickerOpen}"
+                            OKButtonBackgroundColor="{StaticResource OnPrimary}"
+                            OKButtonTextColor="{StaticResource Secondary}"
+                            OkCommand="{Binding ChangeExpirationDateCommand}"
+                            PickerHeight="300"
+                            PickerMode="Dialog"
+                            PickerWidth="300"
+                            SelectedItemTextColor="{StaticResource Primary}"
+                            ShowFooter="True" />
+                    </StackLayout>
+
+                    <StackLayout
+                        Padding="15,0,15,15"
+                        HorizontalOptions="EndAndExpand"
+                        Orientation="Horizontal"
+                        VerticalOptions="End">
+                        <buttons:SfButton
+                            Command="{Binding CancelLotCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            Text="CANCEL" />
+                        <buttons:SfButton
+                            Command="{Binding AddLotCommand}"
+                            IsEnabled="{Binding IsNotBusy}"
+                            Text="ADD"
+                            WidthRequest="80" />
+                    </StackLayout>
+                </StackLayout>
+            </ScrollView>
+
+            <controls:ActivityIndicatorView Grid.Row="0" ActivityIndicatorViewModel="{Binding ActivityIndicatorViewModel}" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

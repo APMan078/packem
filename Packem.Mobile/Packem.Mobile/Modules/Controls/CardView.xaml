@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<cards:SfCardView
+    x:Class="Packem.Mobile.Modules.Controls.CardView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:cards="clr-namespace:Syncfusion.XForms.Cards;assembly=Syncfusion.Cards.XForms"
+    x:Name="cardPage"
+    Margin="5"
+    Padding="10"
+    BorderWidth="1"
+    HasShadow="False"
+    HeightRequest="50">
+    <StackLayout Orientation="Horizontal">
+        <Image HeightRequest="25">
+            <Image.Source>
+                <FontImageSource x:Name="imageCard" FontFamily="{DynamicResource FontMaterialIconsOutlinedRegular}" />
+            </Image.Source>
+        </Image>
+        <StackLayout VerticalOptions="Center">
+            <Label
+                x:Name="labelCard"
+                FontAttributes="Bold"
+                FontSize="Large" />
+        </StackLayout>
+    </StackLayout>
+</cards:SfCardView>

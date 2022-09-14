@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.Authentications.RegisterDeviceView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:converters="clr-namespace:Packem.Mobile.Common.Converters"
+    xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+    xmlns:me="clr-namespace:Packem.Mobile.Common.MarkupExtensions"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.Authentications"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:DataType="vm:RegisterDeviceViewModel"
+    Shell.FlyoutItemIsVisible="False"
+    Shell.NavBarIsVisible="False">
+    <ContentPage.Resources>
+        <converters:FirstValidationErrorConverter x:Key="FirstValidationErrorConverter" />
+    </ContentPage.Resources>
+    <ContentPage.Content>
+        <Grid>
+            <Grid Padding="18" RowDefinitions="1.4*, 8.6*">
+                <StackLayout
+                    Padding="0,20,0,0"
+                    HorizontalOptions="StartAndExpand"
+                    Orientation="Horizontal"
+                    VerticalOptions="StartAndExpand">
+                    <Image HeightRequest="40" Source="{me:EmbeddedImage Packem.Mobile.Resources.Images.packem_logo_red_secondary.png}" />
+                    <StackLayout Orientation="Horizontal" VerticalOptions="Center">
+                        <Label
+                            FontAttributes="Bold"
+                            FontSize="Large"
+                            Text="PACKEM" />
+                        <Label
+                            Margin="-5,0,0,0"
+                            FontSize="Large"
+                            Text="WMS" />
+                    </StackLayout>
+                </StackLayout>
+                <StackLayout Grid.Row="1">
+                    <Label
+                        Padding="0,0,0,20"
+                        FontAttributes="Bold"
+                        FontSize="Title"
+                        Text="Register Device" />
+
+                    <StackLayout Padding="0,0,0,30">
+                        <Label FontSize="Medium" Text="To register a device, an administrator" />
+                        <Label
+                            Margin="0,-4,0,0"
+                            FontSize="Medium"
+                            Text="To must access Device Management from" />
+                        <Label
+                            Margin="0,-4,0,0"
+                            FontSize="Medium"
+                            Text="the PackemWMS web application." />
+                    </StackLayout>
+
+                    <StackLayout Padding="0,0,0,30">
+                        <Label FontSize="Medium" Text="Ensure that this device is securely" />
+                        <Label
+                            Margin="0,-4,0,0"
+                            FontSize="Medium"
+                            Text="connected to a wireless network and" />
+                        <Label
+                            Margin="0,-4,0,0"
+                            FontSize="Medium"
+                            Text="insert the temporary access token below." />
+                    </StackLayout>
+
+                    <StackLayout>
+                        <inputLayout:SfTextInputLayout
+                            Padding="0,0,0,10"
+                            ContainerType="Outlined"
+                            ErrorText="{Binding RegistrationToken.Errors, Converter={StaticResource FirstValidationErrorConverter}}"
+                            HasError="{Binding RegistrationToken.IsValid, Converter={xct:InvertedBoolConverter}}"
+                            Hint="Registration Token*">
+                            <Entry Text="{Binding RegistrationToken.Value}">
+                                <Entry.Behaviors>
+                                    <xct:EventToCommandBehavior Command="{Binding RegistrationTokenUnfocusedCommand}" EventName="Unfocused" />
+                                </Entry.Behaviors>
+                            </Entry>
+                        </inputLayout:SfTextInputLayout>
+                    </StackLayout>
+                    <Label
+                        Padding="10,0,0,0"
+                        FontAttributes="Bold"
+                        IsEnabled="{Binding IsNotBusy}"
+                        Style="{StaticResource LinkLabel}"
+                        Text="REGISTER">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding RegisterCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </StackLayout>
+            </Grid>
+
+            <controls:ActivityIndicatorView Grid.Row="0" ActivityIndicatorViewModel="{Binding ActivityIndicatorViewModel}" />
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

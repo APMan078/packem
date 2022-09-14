@@ -1,0 +1,241 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="Packem.Mobile.Modules.KitchenSink.Syncfusion.KitchenSinkSyncfusionView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ListCollection="clr-namespace:System.Collections.Generic;assembly=netstandard"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    xmlns:cards="clr-namespace:Syncfusion.XForms.Cards;assembly=Syncfusion.Cards.XForms"
+    xmlns:combobox="clr-namespace:Syncfusion.XForms.ComboBox;assembly=Syncfusion.SfComboBox.XForms"
+    xmlns:controls="clr-namespace:Packem.Mobile.Modules.Controls"
+    xmlns:dataGrid="clr-namespace:Syncfusion.SfDataGrid.XForms;assembly=Syncfusion.SfDataGrid.XForms"
+    xmlns:inputLayout="clr-namespace:Syncfusion.XForms.TextInputLayout;assembly=Syncfusion.Core.XForms"
+    xmlns:me="clr-namespace:Packem.Mobile.Common.MarkupExtensions"
+    xmlns:numericBox="clr-namespace:Syncfusion.SfNumericTextBox.XForms;assembly=Syncfusion.SfNumericTextBox.XForms"
+    xmlns:sfPopup="clr-namespace:Syncfusion.XForms.PopupLayout;assembly=Syncfusion.SfPopupLayout.XForms"
+    xmlns:vm="clr-namespace:Packem.Mobile.Modules.KitchenSink.Syncfusion"
+    xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+    x:DataType="vm:KitchenSinkSyncfusionViewModel"
+    BackgroundColor="{StaticResource OnPrimary}"
+    Shell.FlyoutItemIsVisible="False"
+    Shell.NavBarIsVisible="True">
+    <Shell.TitleView>
+        <Grid ColumnDefinitions="4*, 1*">
+            <StackLayout
+                Grid.Column="0"
+                HorizontalOptions="CenterAndExpand"
+                Orientation="Horizontal">
+                <Image HeightRequest="40" Source="{me:EmbeddedImage Packem.Mobile.Resources.Images.packem_logo_red.png}" />
+            </StackLayout>
+            <StackLayout
+                Grid.Column="1"
+                Padding="0,0,10,0"
+                HorizontalOptions="End"
+                Orientation="Horizontal"
+                VerticalOptions="Center">
+                <Image>
+                    <Image.Source>
+                        <FontImageSource
+                            FontFamily="{DynamicResource FontMaterialIconsOutlinedRegular}"
+                            Glyph="{StaticResource IconSettings}"
+                            Color="Gray" />
+                    </Image.Source>
+                </Image>
+            </StackLayout>
+        </Grid>
+    </Shell.TitleView>
+    <ContentPage.Behaviors>
+        <xct:EventToCommandBehavior Command="{Binding AppearingCommand}" EventName="Appearing" />
+    </ContentPage.Behaviors>
+    <ContentPage.Content>
+        <ScrollView>
+            <StackLayout Padding="10">
+                <Label FontSize="Large" Text="Kitchen Sink" />
+
+                <StackLayout Padding="10">
+                    <Label FontSize="Title" Text="Title" />
+                    <Label FontSize="Large" Text="Large" />
+                    <Label FontSize="Medium" Text="Medium" />
+                    <Label FontSize="Subtitle" Text="Subtitle" />
+                    <Label FontSize="Body" Text="Body" />
+                    <Label FontSize="Header" Text="Header" />
+                    <Label FontSize="Default" Text="Default" />
+                    <Label FontSize="Small" Text="Small" />
+                    <Label FontSize="Caption" Text="Caption" />
+                    <Label FontSize="Micro" Text="Micro" />
+                </StackLayout>
+
+                <inputLayout:SfTextInputLayout
+                    Padding="10"
+                    ContainerType="Outlined"
+                    Hint="Username">
+                    <Entry />
+                </inputLayout:SfTextInputLayout>
+
+                <inputLayout:SfTextInputLayout
+                    Padding="10"
+                    ContainerType="Outlined"
+                    EnablePasswordVisibilityToggle="True"
+                    Hint="Password">
+                    <Entry IsPassword="True" Text="John" />
+                </inputLayout:SfTextInputLayout>
+
+                <controls:EntryWithScanAndSearchView Padding="10" Hint="Order" />
+                <controls:EntryWithScanView Padding="10" Hint="Item" />
+
+                <inputLayout:SfTextInputLayout
+                    Padding="10"
+                    ContainerType="Outlined"
+                    Hint="Available">
+                    <numericBox:SfNumericTextBox
+                        AllowDefaultDecimalDigits="False"
+                        AllowNull="True"
+                        Value="2000" />
+                </inputLayout:SfTextInputLayout>
+
+                <inputLayout:SfTextInputLayout
+                    Padding="10"
+                    ContainerType="Outlined"
+                    Hint="Warehouse">
+                    <combobox:SfComboBox HeightRequest="52">
+                        <combobox:SfComboBox.ComboBoxSource>
+                            <ListCollection:List x:TypeArguments="x:String">
+                                <x:String>Warehouse 1</x:String>
+                                <x:String>Warehouse 2</x:String>
+                                <x:String>Warehouse 3</x:String>
+                            </ListCollection:List>
+                        </combobox:SfComboBox.ComboBoxSource>
+                    </combobox:SfComboBox>
+                </inputLayout:SfTextInputLayout>
+
+                <inputLayout:SfTextInputLayout
+                    Padding="10"
+                    ContainerType="Outlined"
+                    Hint="Printer Label">
+                    <buttons:SfRadioGroup>
+                        <buttons:SfRadioButton IsChecked="True" Text="Printer 1" />
+                        <buttons:SfRadioButton Text="Printer 2" />
+                        <buttons:SfRadioButton Text="Printer 3" />
+                        <buttons:SfRadioButton Text="Printer 4" />
+                    </buttons:SfRadioGroup>
+                </inputLayout:SfTextInputLayout>
+
+                <buttons:SfButton
+                    Padding="10"
+                    BackgroundColor="{StaticResource Primary}"
+                    CornerRadius="3"
+                    Text="BUTTON"
+                    TextColor="{StaticResource OnPrimary}" />
+
+                <buttons:SfButton
+                    Padding="10"
+                    BackgroundColor="{StaticResource Primary}"
+                    CornerRadius="3"
+                    IsEnabled="False"
+                    Text="DISABLED"
+                    TextColor="{StaticResource OnPrimary}" />
+
+                <Label
+                    Padding="10"
+                    Text="Password Help"
+                    TextColor="#1C9DCC" />
+
+                <Label
+                    Padding="10"
+                    Text="CLEAR"
+                    TextColor="#707070" />
+
+                <Label
+                    Padding="10"
+                    Opacity="0.5"
+                    Text="PUT AWAY"
+                    TextColor="#1C9DCC" />
+
+                <controls:LabelForNoRecordFound Padding="10" Text="NO RECORD FOUND" />
+
+                <cards:SfCardView Padding="10">
+                    <Label Text="Card" TextColor="Black" />
+                </cards:SfCardView>
+
+                <buttons:SfButton
+                    Padding="10"
+                    BackgroundColor="{StaticResource Primary}"
+                    Command="{Binding PopupCommand}"
+                    CornerRadius="3"
+                    Text="Popup"
+                    TextColor="{StaticResource OnPrimary}" />
+
+                <sfPopup:SfPopupLayout x:Name="popupLayout" IsOpen="{Binding PopupOpen}">
+                    <sfPopup:SfPopupLayout.Content>
+                        <StackLayout x:Name="mainLayout">
+                            <Button
+                                x:Name="clickToShowPopup"
+                                HorizontalOptions="FillAndExpand"
+                                Text="ClickToShowPopup"
+                                VerticalOptions="Start" />
+                        </StackLayout>
+                    </sfPopup:SfPopupLayout.Content>
+                </sfPopup:SfPopupLayout>
+
+                <dataGrid:SfDataGrid
+                    Padding="10"
+                    AllowSorting="True"
+                    AutoGenerateColumns="False"
+                    ColumnSizer="Star"
+                    ItemsSource="{Binding Inventories}">
+                    <dataGrid:SfDataGrid.GridStyle>
+                        <dataGrid:DefaultStyle
+                            GridLinesVisibility="Horizontal"
+                            HeaderBackgroundColor="#EFF2F7"
+                            HeaderForegroundColor="Black" />
+                    </dataGrid:SfDataGrid.GridStyle>
+                    <dataGrid:SfDataGrid.Columns x:TypeArguments="dataGrid:Columns">
+                        <dataGrid:GridTextColumn HeaderText="Loc." MappingName="Location" />
+                        <dataGrid:GridTextColumn HeaderText="Description" MappingName="Description" />
+                        <dataGrid:GridTextColumn HeaderText="Avail" MappingName="Available" />
+                    </dataGrid:SfDataGrid.Columns>
+                </dataGrid:SfDataGrid>
+
+                <StackLayout Padding="0,0,0,20">
+                    <BoxView HeightRequest="1" Color="LightGray" />
+                </StackLayout>
+
+                <controls:CardView
+                    BorderColor="#E2E2E2"
+                    CardImageColor="#1C9DCC"
+                    CardImageGlyph="{StaticResource IconSettings}"
+                    Text="Inventory"
+                    TextColor="Black" />
+
+                <controls:ScanItemButtonView Text="SCAN ITEM" />
+
+                <!--<border:SfBorder BorderColor="{Binding Source={x:Reference FullNameEntry}, Path=IsFocused, Converter={StaticResource ColorConverter}, ConverterParameter=3}" Style="{StaticResource DataFormBorderlessEntryBorderStyle}">
+                    <Grid ColumnDefinitions="*, Auto">
+
+                        <controls:BorderlessEntry
+                            x:Name="FullNameEntry"
+                            Margin="12,0"
+                            HeightRequest="40"
+                            Placeholder="Full Name"
+                            Style="{StaticResource BorderlessEntryStyle}"
+                            Text="{Binding FullName.Value}">
+                            <Entry.Behaviors>
+                                <behaviour:EntryLineValidationBehaviour IsValid="{Binding FullName.IsValid}" />
+                            </Entry.Behaviors>
+                        </controls:BorderlessEntry>
+
+                -->
+                <!--  Label to display error icon  -->
+                <!--
+                        <Label
+                            Grid.Column="1"
+                            Margin="12,0"
+                            IsVisible="{Binding Path=IsVisible, Source={x:Reference FullNameValidationLabel}}"
+                            Style="{StaticResource ErrorIconLabelStyle}"
+                            Text="{StaticResource Error}" />
+                    </Grid>
+                </border:SfBorder>-->
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

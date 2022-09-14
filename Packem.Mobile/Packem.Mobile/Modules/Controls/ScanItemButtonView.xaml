@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<StackLayout
+    x:Class="Packem.Mobile.Modules.Controls.ScanItemButtonView"
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:buttons="clr-namespace:Syncfusion.XForms.Buttons;assembly=Syncfusion.Buttons.XForms"
+    Padding="10"
+    HorizontalOptions="Center">
+    <buttons:SfButton
+        x:Name="buttonScanItem"
+        BackgroundColor="{StaticResource Primary}"
+        CornerRadius="30"
+        HeightRequest="45"
+        ShowIcon="True"
+        TextColor="{StaticResource OnPrimary}"
+        WidthRequest="130">
+        <buttons:SfButton.Image>
+            <Image>
+                <Image.Source>
+                    <FontImageSource
+                        FontFamily="{DynamicResource FontMaterialIconsOutlinedRegular}"
+                        Glyph="{StaticResource IconDocumentScanner}"
+                        Color="{StaticResource OnPrimary}" />
+                </Image.Source>
+            </Image>
+        </buttons:SfButton.Image>
+    </buttons:SfButton>
+</StackLayout>
